@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -12,6 +13,7 @@ import gen.io.github.onecx.parameters.bff.clients.api.HistoriesApi;
 import gen.io.github.onecx.parameters.bff.rs.internal.HistoriesApiService;
 
 @ApplicationScoped
+@Transactional(value = Transactional.TxType.NOT_SUPPORTED)
 public class HistoryRestController implements HistoriesApiService {
 
     @Inject
@@ -35,6 +37,7 @@ public class HistoryRestController implements HistoriesApiService {
 
     @Override
     public Response getApplicationParametersHistoryById(String id) {
+        System.out.println("############ -> " + id);
         return Response.fromResponse(client.getApplicationParametersHistoryById(id)).build();
     }
 

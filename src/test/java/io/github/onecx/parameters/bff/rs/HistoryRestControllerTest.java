@@ -135,10 +135,12 @@ class HistoryRestControllerTest {
 
         var output = given()
                 .when()
+                .log().all()
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", data.getId())
                 .get("{id}")
                 .then()
+                .log().all()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
                 .extract().as(ApplicationParameterHistoryDTO.class);
