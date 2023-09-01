@@ -37,7 +37,6 @@ public class HistoryRestController implements HistoriesApiService {
 
     @Override
     public Response getApplicationParametersHistoryById(String id) {
-        System.out.println("############ -> " + id);
         return Response.fromResponse(client.getApplicationParametersHistoryById(id)).build();
     }
 

@@ -7,7 +7,6 @@ import static org.mockserver.model.HttpResponse.response;
 
 import java.util.List;
 
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.core.Response;
 
@@ -20,15 +19,10 @@ import org.mockserver.model.MediaType;
 import gen.io.github.onecx.parameters.bff.clients.model.*;
 import gen.io.github.onecx.parameters.bff.rs.internal.model.*;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
-import io.quarkiverse.mockserver.test.MockServerTestResource;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.common.http.TestHTTPEndpoint;
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 
-@QuarkusTest
-@TestHTTPEndpoint(ParametersRestController.class)
-@QuarkusTestResource(MockServerTestResource.class)
-class ParametersRestControllerTest {
+@QuarkusIntegrationTest
+class ParametersRestControllerTest extends AbstractTest {
     @InjectMockServerClient
     MockServerClient mockServerClient;
 
@@ -52,7 +46,7 @@ class ParametersRestControllerTest {
         var output = given()
                 .when()
                 .contentType(APPLICATION_JSON)
-                .get("applications")
+                .get("/parameters/applications")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -83,7 +77,7 @@ class ParametersRestControllerTest {
         var output = given()
                 .when()
                 .contentType(APPLICATION_JSON)
-                .get("keys")
+                .get("/parameters/keys")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -116,7 +110,7 @@ class ParametersRestControllerTest {
                 .when()
                 .contentType(APPLICATION_JSON)
                 .body(input)
-                .post()
+                .post("/parameters")
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode())
                 .contentType(APPLICATION_JSON);
@@ -141,7 +135,7 @@ class ParametersRestControllerTest {
                 .when()
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", id)
-                .delete("{id}")
+                .delete("/parameters/{id}")
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode())
                 .contentType(APPLICATION_JSON);
@@ -176,7 +170,7 @@ class ParametersRestControllerTest {
         var output = given()
                 .when()
                 .contentType(APPLICATION_JSON)
-                .get()
+                .get("/parameters")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -207,7 +201,7 @@ class ParametersRestControllerTest {
                 .when()
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", data.getId())
-                .get("{id}")
+                .get("/parameters/{id}")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -243,7 +237,7 @@ class ParametersRestControllerTest {
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", id)
                 .body(input)
-                .put("{id}")
+                .put("/parameters/{id}")
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode())
                 .contentType(APPLICATION_JSON);

@@ -29,6 +29,10 @@
             <artifactId>quarkus-resteasy-jackson</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-health</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.quarkiverse.openapi.generator</groupId>
             <artifactId>quarkus-openapi-generator</artifactId>
         </dependency>
@@ -60,16 +64,17 @@
         </dependency>
 
         <!-- DEV -->
-        <dependency>
-            <groupId>io.quarkiverse.mockserver</groupId>
-            <artifactId>quarkus-mockserver</artifactId>
-            <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.quarkiverse.mockserver</groupId>-->
+<!--            <artifactId>quarkus-mockserver</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
 
         <!-- TEST -->
         <dependency>
             <groupId>io.quarkiverse.mockserver</groupId>
             <artifactId>quarkus-mockserver-test</artifactId>
+            <version>1.1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.swagger.parser.v3</groupId>

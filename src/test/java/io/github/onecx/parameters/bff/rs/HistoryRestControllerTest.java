@@ -24,12 +24,10 @@ import gen.io.github.onecx.parameters.bff.rs.internal.model.ApplicationParameter
 import gen.io.github.onecx.parameters.bff.rs.internal.model.ApplicationParameterHistoryPageResultDTO;
 import gen.io.github.onecx.parameters.bff.rs.internal.model.ParameterHistoryCountDTO;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
-import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-@TestHTTPEndpoint(HistoryRestController.class)
-class HistoryRestControllerTest {
+class HistoryRestControllerTest extends AbstractTest {
 
     @InjectMockServerClient
     MockServerClient mockServerClient;
@@ -64,7 +62,7 @@ class HistoryRestControllerTest {
         var output = given()
                 .when()
                 .contentType(APPLICATION_JSON)
-                .get()
+                .get("/histories")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -106,7 +104,7 @@ class HistoryRestControllerTest {
         var output = given()
                 .when()
                 .contentType(APPLICATION_JSON)
-                .get("latest")
+                .get("/histories/latest")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -135,12 +133,10 @@ class HistoryRestControllerTest {
 
         var output = given()
                 .when()
-                .log().all()
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", data.getId())
-                .get("{id}")
+                .get("/histories/{id}")
                 .then()
-                .log().all()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
                 .extract().as(ApplicationParameterHistoryDTO.class);
@@ -172,7 +168,7 @@ class HistoryRestControllerTest {
         var output = given()
                 .when()
                 .contentType(APPLICATION_JSON)
-                .get("counts")
+                .get("/histories/counts")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
