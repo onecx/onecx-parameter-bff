@@ -64,11 +64,11 @@
         </dependency>
 
         <!-- DEV -->
-<!--        <dependency>-->
-<!--            <groupId>io.quarkiverse.mockserver</groupId>-->
-<!--            <artifactId>quarkus-mockserver</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>io.quarkiverse.mockserver</groupId>
+            <artifactId>quarkus-mockserver</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- TEST -->
         <dependency>

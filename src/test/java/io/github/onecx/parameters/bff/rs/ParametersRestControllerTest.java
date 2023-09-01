@@ -19,9 +19,9 @@ import org.mockserver.model.MediaType;
 import gen.io.github.onecx.parameters.bff.clients.model.*;
 import gen.io.github.onecx.parameters.bff.rs.internal.model.*;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
-import io.quarkus.test.junit.QuarkusIntegrationTest;
+import io.quarkus.test.junit.QuarkusTest;
 
-@QuarkusIntegrationTest
+@QuarkusTest
 class ParametersRestControllerTest extends AbstractTest {
     @InjectMockServerClient
     MockServerClient mockServerClient;
