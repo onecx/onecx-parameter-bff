@@ -1,0 +1,593 @@
+---
+openapi: 3.0.3
+info:
+  title: onecx-parameters-bff
+  description: OneCx parameters Bff
+  version: "2.0"
+servers:
+  - url: http://onecx-parameters-bff:8080/
+tags:
+  - name: histories
+  - name: parameters
+paths:
+  /histories:
+    get:
+      tags:
+        - histories
+      description: Find all parameters history
+      operationId: getAllApplicationParametersHistory
+      parameters:
+        - name: applicationId
+          in: query
+          schema:
+            description: The application parameter id.
+            type: string
+        - name: key
+          in: query
+          schema:
+            description: The application parameter key.
+            type: string
+        - name: pageNumber
+          in: query
+          schema:
+            format: int32
+            description: The number of page.
+            default: 0
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            format: int32
+            description: The size of page
+            default: 100
+            type: integer
+        - name: type
+          in: query
+          schema:
+            description: The application parameter type.
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationParameterHistoryPageResult'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal Server Error
+  /histories/counts:
+    get:
+      tags:
+        - histories
+      description: Get creation dates and counts by criteria
+      operationId: getCountsByCriteria
+      parameters:
+        - name: applicationId
+          in: query
+          schema:
+            description: The application parameter id.
+            type: string
+        - name: key
+          in: query
+          schema:
+            description: The application parameter key.
+            type: string
+        - name: pageNumber
+          in: query
+          schema:
+            format: int32
+            description: The number of page.
+            default: 0
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            format: int32
+            description: The size of page
+            default: 100
+            type: integer
+        - name: type
+          in: query
+          schema:
+            description: The application parameter type.
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParameterHistoryCount'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal Server Error
+  /histories/latest:
+    get:
+      tags:
+        - histories
+      description: Find all parameters history latest
+      operationId: getAllApplicationParametersHistoryLatest
+      parameters:
+        - name: applicationId
+          in: query
+          schema:
+            description: The application parameter id.
+            type: string
+        - name: key
+          in: query
+          schema:
+            description: The application parameter key.
+            type: string
+        - name: pageNumber
+          in: query
+          schema:
+            format: int32
+            description: The number of page.
+            default: 0
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            format: int32
+            description: The size of page
+            default: 100
+            type: integer
+        - name: type
+          in: query
+          schema:
+            description: The application parameter type.
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationParameterHistoryPageResult'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal Server Error
+  /histories/{id}:
+    get:
+      tags:
+        - histories
+      description: Find parameters history by Id
+      operationId: getApplicationParametersHistoryById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationParameterHistory'
+        "400":
+          description: Bad request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+  /parameters:
+    get:
+      tags:
+        - parameters
+      description: Find all parameters
+      operationId: getAllApplicationParameters
+      parameters:
+        - name: applicationId
+          in: query
+          schema:
+            description: The application parameter id.
+            type: string
+        - name: key
+          in: query
+          schema:
+            description: The application parameter key.
+            type: string
+        - name: name
+          in: query
+          schema:
+            description: The application parameter name.
+            type: string
+        - name: pageNumber
+          in: query
+          schema:
+            format: int32
+            description: The number of page.
+            default: 0
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            format: int32
+            description: The size of page
+            default: 100
+            type: integer
+        - name: type
+          in: query
+          schema:
+            description: The application parameter type.
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationParameterPageResult'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal Server Error
+    post:
+      tags:
+        - parameters
+      description: Create parameter
+      operationId: createParameterValue
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationParameterCreate'
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestException'
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+  /parameters/applications:
+    get:
+      tags:
+        - parameters
+      description: Find all parameters
+      operationId: getAllApplications
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationsPageResult'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal Server Error
+  /parameters/keys:
+    get:
+      tags:
+        - parameters
+      description: Find all parameters
+      operationId: getAllKeys
+      parameters:
+        - name: applicationId
+          in: query
+          schema:
+            description: The application parameter id.
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeysPageResult'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal Server Error
+  /parameters/{id}:
+    get:
+      tags:
+        - parameters
+      description: Find parameter by id
+      operationId: getParameterById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationParameter'
+        "400":
+          description: Bad request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+    put:
+      tags:
+        - parameters
+      description: Update parameter
+      operationId: updateParameterValue
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationParameterUpdate'
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestException'
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+    delete:
+      tags:
+        - parameters
+      description: Delete parameter
+      operationId: deleteParameter
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestException'
+        "500":
+          description: Internal Server Error
+components:
+  schemas:
+    ApplicationParameterCreate:
+      type: object
+      properties:
+        key:
+          type: string
+        applicationId:
+          type: string
+        value:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        unit:
+          type: string
+        rangeFrom:
+          format: int32
+          type: integer
+        rangeTo:
+          format: int32
+          type: integer
+    ApplicationParameter:
+      type: object
+      properties:
+        id:
+          type: string
+        modificationCount:
+          format: int32
+          type: integer
+        creationDate:
+          format: date-time
+          type: string
+          example: 2022-03-10T12:15:50-04:00
+        creationUser:
+          type: string
+        modificationDate:
+          format: date-time
+          type: string
+          example: 2022-03-10T12:15:50-04:00
+        modificationUser:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        applicationId:
+          type: string
+        key:
+          type: string
+        setValue:
+          type: string
+        importValue:
+          type: string
+        type:
+          type: string
+        unit:
+          type: string
+        rangeFrom:
+          format: int32
+          type: integer
+        rangeTo:
+          format: int32
+          type: integer
+    ApplicationParameterHistory:
+      type: object
+      properties:
+        id:
+          type: string
+        modificationCount:
+          format: int32
+          type: integer
+        creationDate:
+          format: date-time
+          type: string
+          example: 2022-03-10T12:15:50-04:00
+        creationUser:
+          type: string
+        modificationDate:
+          format: date-time
+          type: string
+          example: 2022-03-10T12:15:50-04:00
+        modificationUser:
+          type: string
+        applicationId:
+          type: string
+        key:
+          type: string
+        usedValue:
+          type: string
+        defaultValue:
+          type: string
+        type:
+          type: string
+        instanceId:
+          type: string
+    ApplicationParameterHistoryPageResult:
+      type: object
+      properties:
+        totalElements:
+          format: int64
+          description: The total elements in the resource.
+          type: integer
+        number:
+          format: int32
+          type: integer
+        size:
+          format: int32
+          type: integer
+        totalPages:
+          format: int64
+          type: integer
+        stream:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationParameterHistory'
+    ApplicationParameterPageResult:
+      type: object
+      properties:
+        totalElements:
+          format: int64
+          description: The total elements in the resource.
+          type: integer
+        number:
+          format: int32
+          type: integer
+        size:
+          format: int32
+          type: integer
+        totalPages:
+          format: int64
+          type: integer
+        stream:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationParameter'
+    ApplicationParameterUpdate:
+      type: object
+      properties:
+        value: {}
+        description:
+          type: string
+        unit:
+          type: string
+        rangeFrom:
+          format: int32
+          type: integer
+        rangeTo:
+          format: int32
+          type: integer
+    ApplicationsPageResult:
+      type: object
+      properties:
+        totalElements:
+          format: int64
+          description: The total elements in the resource.
+          type: integer
+        number:
+          format: int32
+          type: integer
+        size:
+          format: int32
+          type: integer
+        totalPages:
+          format: int64
+          type: integer
+        stream:
+          type: array
+          items:
+            type: string
+    KeysPageResult:
+      type: object
+      properties:
+        totalElements:
+          format: int64
+          description: The total elements in the resource.
+          type: integer
+        number:
+          format: int32
+          type: integer
+        size:
+          format: int32
+          type: integer
+        totalPages:
+          format: int64
+          type: integer
+        stream:
+          type: array
+          items:
+            type: string
+    ParameterHistoryCount:
+      type: object
+      properties:
+        creationDate:
+          format: date-time
+          type: string
+          example: 2022-03-10T12:15:50
+        count:
+          format: int64
+          type: integer
+    RestException:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        message:
+          type: string
+        parameters:
+          type: array
+          items: {}
+        namedParameters:
+          type: object
+          additionalProperties: {}

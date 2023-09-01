@@ -1,0 +1,4 @@
+app:
+  image:
+    repository: "onecx/onecx-parameter-bff"
+    tag: 999-SNAPSHOT
