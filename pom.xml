@@ -5,11 +5,15 @@
     <parent>
         <groupId>io.github.onecx</groupId>
         <artifactId>onecx-quarkus3-parent</artifactId>
-        <version>999-SNAPSHOT</version>
+        <version>0.10.0</version>
     </parent>
 
     <artifactId>onecx-parameter-bff</artifactId>
     <version>999-SNAPSHOT</version>
+
+    <properties>
+        <swagger-parser.version>2.1.16</swagger-parser.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -77,7 +81,7 @@
         <dependency>
             <groupId>io.swagger.parser.v3</groupId>
             <artifactId>swagger-parser</artifactId>
-            <version>2.1.16</version>
+            <version>${swagger-parser.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
