@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.github.onecx</groupId>
         <artifactId>onecx-quarkus3-parent</artifactId>
-        <version>0.10.0</version>
+        <version>0.11.0</version>
     </parent>
 
     <artifactId>onecx-parameter-bff</artifactId>
@@ -13,6 +13,7 @@
 
     <properties>
         <swagger-parser.version>2.1.16</swagger-parser.version>
+        <download-maven-plugin.version>1.7.1</download-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -96,7 +97,6 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.0.0</version>
                 <executions>
                     <execution>
                         <id>internal</id>
@@ -140,7 +140,7 @@
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>1.7.1</version>
+                <version>${download-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>
