@@ -13,6 +13,7 @@
 
     <properties>
         <swagger-parser.version>2.1.16</swagger-parser.version>
+        <download-maven-plugin.version>1.7.1</download-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -139,7 +140,7 @@
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>1.7.1</version>
+                <version>${download-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>
