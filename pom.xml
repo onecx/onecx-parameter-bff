@@ -5,16 +5,11 @@
     <parent>
         <groupId>io.github.onecx</groupId>
         <artifactId>onecx-quarkus3-parent</artifactId>
-        <version>0.13.0</version>
+        <version>0.14.0</version>
     </parent>
 
     <artifactId>onecx-parameter-bff</artifactId>
     <version>999-SNAPSHOT</version>
-
-    <properties>
-        <swagger-parser.version>2.1.16</swagger-parser.version>
-        <download-maven-plugin.version>1.7.1</download-maven-plugin.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -75,7 +70,6 @@
         <dependency>
             <groupId>io.quarkiverse.mockserver</groupId>
             <artifactId>quarkus-mockserver-test</artifactId>
-            <version>1.2.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.swagger.parser.v3</groupId>
@@ -87,7 +81,6 @@
         <dependency>
             <groupId>io.swagger.parser.v3</groupId>
             <artifactId>swagger-parser</artifactId>
-            <version>${swagger-parser.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -140,7 +133,6 @@
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>${download-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>
