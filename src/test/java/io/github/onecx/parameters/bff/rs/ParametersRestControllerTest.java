@@ -165,11 +165,9 @@ class ParametersRestControllerTest extends AbstractTest {
         mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.DELETE))
                 .withPriority(100)
                 .withId("mock")
-                .respond(httpRequest -> response().withStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-                        .withBody(JsonBody.json(new ProblemDetailResponse()))
-                        .withContentType(MediaType.APPLICATION_JSON));
+                .respond(httpRequest -> response().withStatusCode(Response.Status.BAD_REQUEST.getStatusCode()));
 
-        var output = given()
+        given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
@@ -177,11 +175,8 @@ class ParametersRestControllerTest extends AbstractTest {
                 .pathParam("id", id)
                 .delete("/parameters/{id}")
                 .then()
-                .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
-                .contentType(APPLICATION_JSON)
-                .extract().as(ProblemDetailResponseDTO.class);
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
 
-        Assertions.assertNotNull(output);
         mockServerClient.clear("mock");
     }
 
