@@ -1,4 +1,4 @@
-package org.tkit.onecx.parameters.bff.rs;
+package org.tkit.onecx.parameters.bff.rs.controllers;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import org.jboss.resteasy.reactive.ClientWebApplicationException;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 import org.tkit.onecx.parameters.bff.rs.mappers.ExceptionMapper;
 import org.tkit.onecx.parameters.bff.rs.mappers.ParametersMapper;
+import org.tkit.quarkus.log.cdi.LogService;
 
 import gen.org.tkit.onecx.parameters.bff.clients.api.HistoriesApi;
 import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistory;
@@ -21,6 +22,7 @@ import gen.org.tkit.onecx.parameters.bff.rs.internal.HistoriesApiService;
 
 @ApplicationScoped
 @Transactional(value = Transactional.TxType.NOT_SUPPORTED)
+@LogService
 public class HistoryRestController implements HistoriesApiService {
 
     @Inject

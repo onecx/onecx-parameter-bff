@@ -1,4 +1,4 @@
-package org.tkit.onecx.parameters.bff.rs;
+package org.tkit.onecx.parameters.bff.rs.controllers;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 import org.tkit.onecx.parameters.bff.rs.mappers.ExceptionMapper;
 import org.tkit.onecx.parameters.bff.rs.mappers.ParametersMapper;
+import org.tkit.quarkus.log.cdi.LogService;
 
 import gen.org.tkit.onecx.parameters.bff.clients.api.ParametersApi;
 import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameter;
@@ -27,6 +28,7 @@ import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ProblemDetailResponse
 
 @ApplicationScoped
 @Transactional(value = Transactional.TxType.NOT_SUPPORTED)
+@LogService
 public class ParametersRestController implements ParametersApiService {
 
     @Inject
