@@ -12,6 +12,10 @@ tags:
 paths:
   /histories:
     get:
+      x-onecx:
+        permissions:
+          parameter:
+            - read
       tags:
         - histories
       description: Find all parameters history
@@ -59,6 +63,10 @@ paths:
           description: Bad request
   /histories/counts:
     get:
+      x-onecx:
+        permissions:
+          parameter:
+            - read
       tags:
         - histories
       description: Get creation dates and counts by criteria
@@ -108,6 +116,10 @@ paths:
           description: Bad request
   /histories/latest:
     get:
+      x-onecx:
+        permissions:
+          parameter:
+            - read
       tags:
         - histories
       description: Find all parameters history latest
@@ -155,6 +167,10 @@ paths:
           description: Bad request
   /histories/{id}:
     get:
+      x-onecx:
+        permissions:
+          parameter:
+            - read
       tags:
         - histories
       description: Find parameters history by Id
@@ -178,6 +194,10 @@ paths:
           description: Not Found
   /parameters:
     get:
+      x-onecx:
+        permissions:
+          parameter:
+            - read
       tags:
         - parameters
       description: Find all parameters
@@ -229,6 +249,10 @@ paths:
         "400":
           description: Bad request
     post:
+      x-onecx:
+        permissions:
+          parameter:
+            - write
       tags:
         - parameters
       description: Create parameter
@@ -253,6 +277,10 @@ paths:
           description: Internal Server Error
   /parameters/applications:
     get:
+      x-onecx:
+        permissions:
+          parameter:
+            - read
       tags:
         - parameters
       description: Find all parameters
@@ -268,6 +296,10 @@ paths:
           description: Bad request
   /parameters/keys:
     get:
+      x-onecx:
+        permissions:
+          parameter:
+            - read
       tags:
         - parameters
       description: Find all parameters
@@ -289,6 +321,10 @@ paths:
           description: Bad request
   /parameters/{id}:
     get:
+      x-onecx:
+        permissions:
+          parameter:
+            - read
       tags:
         - parameters
       description: Find parameter by id
@@ -311,6 +347,10 @@ paths:
         "404":
           description: Not Found
     put:
+      x-onecx:
+        permissions:
+          parameter:
+            - write
       tags:
         - parameters
       description: Update parameter
@@ -338,6 +378,10 @@ paths:
         "404":
           description: Not Found
     delete:
+      x-onecx:
+        permissions:
+          parameter:
+            - delete
       tags:
         - parameters
       description: Delete parameter
