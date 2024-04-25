@@ -61,6 +61,8 @@ class HistoryRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .get("/histories")
                 .then()
@@ -103,6 +105,8 @@ class HistoryRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .get("/histories/latest")
                 .then()
@@ -133,6 +137,8 @@ class HistoryRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", data.getId())
                 .get("/histories/{id}")
@@ -167,6 +173,8 @@ class HistoryRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .get("/histories/counts")
                 .then()

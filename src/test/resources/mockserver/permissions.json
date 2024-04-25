@@ -1,0 +1,46 @@
+[
+  {
+    "id": "2",
+    "httpRequest": {
+      "headers": {
+        "apm-principal-token": [ "alice" ]
+      },
+      "path": "/v1/permissions/user/applications/onecx-parameter-bff"
+    },
+    "httpResponse": {
+      "body": {
+        "type": "JSON",
+        "json": {
+          "appId": "onecx-parameter-bff",
+          "permissions": {
+            "parameter": ["read", "write", "delete"],
+            "permission": ["admin-write","admin-read"]
+          }
+        },
+        "contentType": "application/json"
+      }
+    }
+  },
+  {
+    "id": "3",
+    "httpRequest": {
+      "headers": {
+        "apm-principal-token": [ "bob" ]
+      },
+      "path": "/v1/permissions/user/applications/onecx-parameter-bff"
+    },
+    "httpResponse": {
+      "body": {
+        "type": "JSON",
+        "json": {
+          "appId": "onecx-parameter-bff",
+          "permissions": {
+            "parameter": ["read"],
+            "permission": ["admin-write","admin-read"]
+          }
+        },
+        "contentType": "application/json"
+      }
+    }
+  }
+]

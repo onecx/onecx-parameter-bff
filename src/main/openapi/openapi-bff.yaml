@@ -57,8 +57,6 @@ paths:
                 $ref: '#/components/schemas/ApplicationParameterHistoryPageResult'
         "400":
           description: Bad request
-        "500":
-          description: Internal Server Error
   /histories/counts:
     get:
       tags:
@@ -108,8 +106,6 @@ paths:
                   $ref: '#/components/schemas/ParameterHistoryCount'
         "400":
           description: Bad request
-        "500":
-          description: Internal Server Error
   /histories/latest:
     get:
       tags:
@@ -157,8 +153,6 @@ paths:
                 $ref: '#/components/schemas/ApplicationParameterHistoryPageResult'
         "400":
           description: Bad request
-        "500":
-          description: Internal Server Error
   /histories/{id}:
     get:
       tags:
@@ -182,8 +176,6 @@ paths:
           description: Bad request
         "404":
           description: Not Found
-        "500":
-          description: Internal Server Error
   /parameters:
     get:
       tags:
@@ -236,8 +228,6 @@ paths:
                 $ref: '#/components/schemas/ApplicationParameterPageResult'
         "400":
           description: Bad request
-        "500":
-          description: Internal Server Error
     post:
       tags:
         - parameters
@@ -276,8 +266,6 @@ paths:
                 $ref: '#/components/schemas/ApplicationsPageResult'
         "400":
           description: Bad request
-        "500":
-          description: Internal Server Error
   /parameters/keys:
     get:
       tags:
@@ -299,8 +287,6 @@ paths:
                 $ref: '#/components/schemas/KeysPageResult'
         "400":
           description: Bad request
-        "500":
-          description: Internal Server Error
   /parameters/{id}:
     get:
       tags:
@@ -324,8 +310,6 @@ paths:
           description: Bad request
         "404":
           description: Not Found
-        "500":
-          description: Internal Server Error
     put:
       tags:
         - parameters
@@ -353,8 +337,6 @@ paths:
                 $ref: '#/components/schemas/RestException'
         "404":
           description: Not Found
-        "500":
-          description: Internal Server Error
     delete:
       tags:
         - parameters
@@ -375,8 +357,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RestException'
-        "500":
-          description: Internal Server Error
 components:
   schemas:
     ApplicationParameterCreate:

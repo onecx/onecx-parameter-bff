@@ -10,6 +10,10 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import gen.io.github.onecx.parameters.bff.clients.api.ParametersApi;
+import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameter;
+import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameterPageResult;
+import gen.io.github.onecx.parameters.bff.clients.model.ApplicationsPageResult;
+import gen.io.github.onecx.parameters.bff.clients.model.KeysPageResult;
 import gen.io.github.onecx.parameters.bff.rs.internal.ParametersApiService;
 import gen.io.github.onecx.parameters.bff.rs.internal.model.ApplicationParameterCreateDTO;
 import gen.io.github.onecx.parameters.bff.rs.internal.model.ApplicationParameterUpdateDTO;
@@ -28,40 +32,54 @@ public class ParametersRestController implements ParametersApiService {
 
     @Override
     public Response createParameterValue(ApplicationParameterCreateDTO applicationParameterCreateDTO) {
-        var dto = mapper.map(applicationParameterCreateDTO);
-        return Response.fromResponse(client.createParameterValue(dto)).build();
+        try (Response response = client.createParameterValue(mapper.map(applicationParameterCreateDTO))) {
+            return Response.status(response.getStatus()).build();
+        }
     }
 
     @Override
     public Response deleteParameter(String id) {
-        return Response.fromResponse(client.deleteParameter(id)).build();
+        try (Response response = client.deleteParameter(id)) {
+            return Response.status(response.getStatus()).build();
+        }
     }
 
     @Override
     public Response getAllApplicationParameters(String applicationId, String key, String name, Integer pageNumber,
             Integer pageSize, List<String> type) {
-        return Response.fromResponse(client.getAllApplicationParameters(applicationId, key, name, pageNumber, pageSize, type))
-                .build();
+        try (Response response = client.getAllApplicationParameters(applicationId, key, name, pageNumber, pageSize, type)) {
+            var result = mapper.map(response.readEntity(ApplicationParameterPageResult.class));
+            return Response.status(response.getStatus()).entity(result).build();
+        }
     }
 
     @Override
     public Response getAllApplications() {
-        return Response.fromResponse(client.getAllApplications()).build();
+        try (Response response = client.getAllApplications()) {
+            return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(ApplicationsPageResult.class)))
+                    .build();
+        }
     }
 
     @Override
     public Response getAllKeys(String applicationId) {
-        return Response.fromResponse(client.getAllKeys(applicationId)).build();
+        try (Response response = client.getAllKeys(applicationId)) {
+            return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(KeysPageResult.class))).build();
+        }
     }
 
     @Override
     public Response getParameterById(String id) {
-        return Response.fromResponse(client.getParameterById(id)).build();
+        try (Response response = client.getParameterById(id)) {
+            return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(ApplicationParameter.class)))
+                    .build();
+        }
     }
 
     @Override
     public Response updateParameterValue(String id, ApplicationParameterUpdateDTO applicationParameterUpdateDTO) {
-        var dto = mapper.mapUpdate(applicationParameterUpdateDTO);
-        return Response.fromResponse(client.updateParameterValue(id, dto)).build();
+        try (Response response = client.updateParameterValue(id, mapper.mapUpdate(applicationParameterUpdateDTO))) {
+            return Response.status(response.getStatus()).build();
+        }
     }
 }

@@ -45,6 +45,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .get("/parameters/applications")
                 .then()
@@ -76,6 +78,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .get("/parameters/keys")
                 .then()
@@ -108,12 +112,13 @@ class ParametersRestControllerTest extends AbstractTest {
 
         given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .body(input)
                 .post("/parameters")
                 .then()
-                .statusCode(Response.Status.NO_CONTENT.getStatusCode())
-                .contentType(APPLICATION_JSON);
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 
     @Test
@@ -133,12 +138,13 @@ class ParametersRestControllerTest extends AbstractTest {
 
         given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", id)
                 .delete("/parameters/{id}")
                 .then()
-                .statusCode(Response.Status.NO_CONTENT.getStatusCode())
-                .contentType(APPLICATION_JSON);
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 
     @Test
@@ -169,6 +175,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .get("/parameters")
                 .then()
@@ -199,6 +207,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", data.getId())
                 .get("/parameters/{id}")
@@ -234,12 +244,13 @@ class ParametersRestControllerTest extends AbstractTest {
 
         given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", id)
                 .body(input)
                 .put("/parameters/{id}")
                 .then()
-                .statusCode(Response.Status.NO_CONTENT.getStatusCode())
-                .contentType(APPLICATION_JSON);
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 }
