@@ -1,4 +1,4 @@
-package io.github.onecx.parameters.bff.rs;
+package org.tkit.onecx.parameters.bff.rs;
 
 import static io.restassured.RestAssured.given;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -16,8 +16,8 @@ import org.mockserver.client.MockServerClient;
 import org.mockserver.model.JsonBody;
 import org.mockserver.model.MediaType;
 
-import gen.io.github.onecx.parameters.bff.clients.model.*;
-import gen.io.github.onecx.parameters.bff.rs.internal.model.*;
+import gen.org.tkit.onecx.parameters.bff.clients.model.*;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -45,6 +45,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .get("/parameters/applications")
                 .then()
@@ -76,6 +78,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .get("/parameters/keys")
                 .then()
@@ -108,12 +112,23 @@ class ParametersRestControllerTest extends AbstractTest {
 
         given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .body(input)
                 .post("/parameters")
                 .then()
-                .statusCode(Response.Status.NO_CONTENT.getStatusCode())
-                .contentType(APPLICATION_JSON);
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+
+        //create with no body should return BAD_REQUEST
+        given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
+                .contentType(APPLICATION_JSON)
+                .post("/parameters")
+                .then()
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
 
     @Test
@@ -124,21 +139,45 @@ class ParametersRestControllerTest extends AbstractTest {
         // create mock rest endpoint
         mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.DELETE))
                 .withPriority(100)
+                .withId("mock")
                 .respond(httpRequest -> response().withStatusCode(Response.Status.NO_CONTENT.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON));
 
-        ApplicationParameterCreateDTO input = new ApplicationParameterCreateDTO();
-        input.setApplicationId("app1");
-        input.setValue("value1");
-
         given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", id)
                 .delete("/parameters/{id}")
                 .then()
-                .statusCode(Response.Status.NO_CONTENT.getStatusCode())
-                .contentType(APPLICATION_JSON);
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+
+        mockServerClient.clear("mock");
+    }
+
+    @Test
+    void deleteParameter_BAD_REQUEST_Test() {
+
+        String id = "test-id-1";
+
+        // create mock rest endpoint
+        mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.DELETE))
+                .withPriority(100)
+                .withId("mock")
+                .respond(httpRequest -> response().withStatusCode(Response.Status.BAD_REQUEST.getStatusCode()));
+
+        given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
+                .contentType(APPLICATION_JSON)
+                .pathParam("id", id)
+                .delete("/parameters/{id}")
+                .then()
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+
+        mockServerClient.clear("mock");
     }
 
     @Test
@@ -169,6 +208,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .get("/parameters")
                 .then()
@@ -199,6 +240,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         var output = given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", data.getId())
                 .get("/parameters/{id}")
@@ -234,12 +277,13 @@ class ParametersRestControllerTest extends AbstractTest {
 
         given()
                 .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", id)
                 .body(input)
                 .put("/parameters/{id}")
                 .then()
-                .statusCode(Response.Status.NO_CONTENT.getStatusCode())
-                .contentType(APPLICATION_JSON);
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 }
