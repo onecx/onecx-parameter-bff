@@ -8,12 +8,15 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.resteasy.reactive.ClientWebApplicationException;
+import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
 import gen.io.github.onecx.parameters.bff.clients.api.HistoriesApi;
 import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameterHistory;
 import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameterHistoryPageResult;
 import gen.io.github.onecx.parameters.bff.clients.model.ParameterHistoryCount;
 import gen.io.github.onecx.parameters.bff.rs.internal.HistoriesApiService;
+import io.github.onecx.parameters.bff.rs.mappers.ExceptionMapper;
 import io.github.onecx.parameters.bff.rs.mappers.ParametersMapper;
 
 @ApplicationScoped
@@ -26,6 +29,9 @@ public class HistoryRestController implements HistoriesApiService {
 
     @Inject
     ParametersMapper mapper;
+
+    @Inject
+    ExceptionMapper exceptionMapper;
 
     @Override
     public Response getAllApplicationParametersHistory(String applicationId, String key, Integer pageNumber, Integer pageSize,
@@ -61,5 +67,10 @@ public class HistoryRestController implements HistoriesApiService {
             return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(ParameterHistoryCount[].class)))
                     .build();
         }
+    }
+
+    @ServerExceptionMapper
+    public Response restException(ClientWebApplicationException ex) {
+        return exceptionMapper.clientException(ex);
     }
 }

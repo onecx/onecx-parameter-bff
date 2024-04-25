@@ -5,9 +5,13 @@ import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.core.Response;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.resteasy.reactive.ClientWebApplicationException;
+import org.jboss.resteasy.reactive.RestResponse;
+import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
 import gen.io.github.onecx.parameters.bff.clients.api.ParametersApi;
 import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameter;
@@ -17,6 +21,8 @@ import gen.io.github.onecx.parameters.bff.clients.model.KeysPageResult;
 import gen.io.github.onecx.parameters.bff.rs.internal.ParametersApiService;
 import gen.io.github.onecx.parameters.bff.rs.internal.model.ApplicationParameterCreateDTO;
 import gen.io.github.onecx.parameters.bff.rs.internal.model.ApplicationParameterUpdateDTO;
+import gen.io.github.onecx.parameters.bff.rs.internal.model.ProblemDetailResponseDTO;
+import io.github.onecx.parameters.bff.rs.mappers.ExceptionMapper;
 import io.github.onecx.parameters.bff.rs.mappers.ParametersMapper;
 
 @ApplicationScoped
@@ -29,6 +35,9 @@ public class ParametersRestController implements ParametersApiService {
 
     @Inject
     ParametersMapper mapper;
+
+    @Inject
+    ExceptionMapper exceptionMapper;
 
     @Override
     public Response createParameterValue(ApplicationParameterCreateDTO applicationParameterCreateDTO) {
@@ -81,5 +90,15 @@ public class ParametersRestController implements ParametersApiService {
         try (Response response = client.updateParameterValue(id, mapper.mapUpdate(applicationParameterUpdateDTO))) {
             return Response.status(response.getStatus()).build();
         }
+    }
+
+    @ServerExceptionMapper
+    public RestResponse<ProblemDetailResponseDTO> constraint(ConstraintViolationException ex) {
+        return exceptionMapper.constraint(ex);
+    }
+
+    @ServerExceptionMapper
+    public Response restException(ClientWebApplicationException ex) {
+        return exceptionMapper.clientException(ex);
     }
 }

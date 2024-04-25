@@ -167,6 +167,7 @@ class HistoryRestControllerTest extends AbstractTest {
         // create mock rest endpoint
         mockServerClient.when(request().withPath("/histories/counts").withMethod(HttpMethod.GET))
                 .withPriority(100)
+                .withId("mock")
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
                         .withBody(JsonBody.json(data)));
@@ -184,6 +185,25 @@ class HistoryRestControllerTest extends AbstractTest {
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.size(), output.length);
+        mockServerClient.clear("mock");
+    }
 
+    @Test
+    void getCountsByCriteria_Server_error_Test() {
+        // create mock rest endpoint
+        mockServerClient.when(request().withPath("/histories/counts").withMethod(HttpMethod.GET))
+                .withPriority(100)
+                .withId("mock")
+                .respond(httpRequest -> response().withStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()));
+
+        given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
+                .contentType(APPLICATION_JSON)
+                .get("/histories/counts")
+                .then()
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+        mockServerClient.clear("mock");
     }
 }

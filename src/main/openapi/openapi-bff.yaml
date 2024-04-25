@@ -60,7 +60,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationParameterHistoryPageResult'
         "400":
-          description: Bad request
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /histories/counts:
     get:
       x-onecx:
@@ -113,7 +117,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/ParameterHistoryCount'
         "400":
-          description: Bad request
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /histories/latest:
     get:
       x-onecx:
@@ -164,7 +172,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationParameterHistoryPageResult'
         "400":
-          description: Bad request
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /histories/{id}:
     get:
       x-onecx:
@@ -189,7 +201,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationParameterHistory'
         "400":
-          description: Bad request
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
         "404":
           description: Not Found
   /parameters:
@@ -247,7 +263,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationParameterPageResult'
         "400":
-          description: Bad request
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
     post:
       x-onecx:
         permissions:
@@ -258,6 +278,7 @@ paths:
       description: Create parameter
       operationId: createParameterValue
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -270,11 +291,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RestException'
+                $ref: '#/components/schemas/ProblemDetailResponse'
         "404":
           description: Not Found
-        "500":
-          description: Internal Server Error
   /parameters/applications:
     get:
       x-onecx:
@@ -293,7 +312,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationsPageResult'
         "400":
-          description: Bad request
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /parameters/keys:
     get:
       x-onecx:
@@ -318,7 +341,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/KeysPageResult'
         "400":
-          description: Bad request
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /parameters/{id}:
     get:
       x-onecx:
@@ -343,7 +370,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationParameter'
         "400":
-          description: Bad request
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
         "404":
           description: Not Found
     put:
@@ -362,6 +393,7 @@ paths:
           schema:
             type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -374,7 +406,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RestException'
+                $ref: '#/components/schemas/ProblemDetailResponse'
         "404":
           description: Not Found
     delete:
@@ -400,7 +432,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RestException'
+                $ref: '#/components/schemas/ProblemDetailResponse'
 components:
   schemas:
     ApplicationParameterCreate:
@@ -602,16 +634,32 @@ components:
         count:
           format: int64
           type: integer
-    RestException:
+    ProblemDetailResponse:
       type: object
       properties:
         errorCode:
           type: string
+        detail:
+          type: string
+        params:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemDetailParam'
+        invalidParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemDetailInvalidParam'
+    ProblemDetailParam:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    ProblemDetailInvalidParam:
+      type: object
+      properties:
+        name:
+          type: string
         message:
           type: string
-        parameters:
-          type: array
-          items: {}
-        namedParameters:
-          type: object
-          additionalProperties: {}

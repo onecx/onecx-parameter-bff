@@ -1,0 +1,8 @@
+include::onecx-parameter-bff-attributes.adoc[opts=optional]
+
+== onecx-parameter-bff
+
+include::docs.adoc[opts=optional]
+
+
+include::onecx-parameter-bff-docs.adoc[opts=optional]

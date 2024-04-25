@@ -119,6 +119,16 @@ class ParametersRestControllerTest extends AbstractTest {
                 .post("/parameters")
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+
+        //create with no body should return BAD_REQUEST
+        given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
+                .contentType(APPLICATION_JSON)
+                .post("/parameters")
+                .then()
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
 
     @Test
@@ -129,12 +139,9 @@ class ParametersRestControllerTest extends AbstractTest {
         // create mock rest endpoint
         mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.DELETE))
                 .withPriority(100)
+                .withId("mock")
                 .respond(httpRequest -> response().withStatusCode(Response.Status.NO_CONTENT.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON));
-
-        ApplicationParameterCreateDTO input = new ApplicationParameterCreateDTO();
-        input.setApplicationId("app1");
-        input.setValue("value1");
 
         given()
                 .when()
@@ -145,6 +152,37 @@ class ParametersRestControllerTest extends AbstractTest {
                 .delete("/parameters/{id}")
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+
+        mockServerClient.clear("mock");
+    }
+
+    @Test
+    void deleteParameter_BAD_REQUEST_Test() {
+
+        String id = "test-id-1";
+
+        // create mock rest endpoint
+        mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.DELETE))
+                .withPriority(100)
+                .withId("mock")
+                .respond(httpRequest -> response().withStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+                        .withBody(JsonBody.json(new ProblemDetailResponse()))
+                        .withContentType(MediaType.APPLICATION_JSON));
+
+        var output = given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
+                .contentType(APPLICATION_JSON)
+                .pathParam("id", id)
+                .delete("/parameters/{id}")
+                .then()
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
+                .contentType(APPLICATION_JSON)
+                .extract().as(ProblemDetailResponseDTO.class);
+
+        Assertions.assertNotNull(output);
+        mockServerClient.clear("mock");
     }
 
     @Test
