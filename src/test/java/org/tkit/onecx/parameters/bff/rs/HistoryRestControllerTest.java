@@ -1,4 +1,4 @@
-package io.github.onecx.parameters.bff.rs;
+package org.tkit.onecx.parameters.bff.rs;
 
 import static io.restassured.RestAssured.given;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -17,12 +17,12 @@ import org.mockserver.client.MockServerClient;
 import org.mockserver.model.JsonBody;
 import org.mockserver.model.MediaType;
 
-import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameterHistory;
-import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameterHistoryPageResult;
-import gen.io.github.onecx.parameters.bff.clients.model.ParameterHistoryCount;
-import gen.io.github.onecx.parameters.bff.rs.internal.model.ApplicationParameterHistoryDTO;
-import gen.io.github.onecx.parameters.bff.rs.internal.model.ApplicationParameterHistoryPageResultDTO;
-import gen.io.github.onecx.parameters.bff.rs.internal.model.ParameterHistoryCountDTO;
+import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistory;
+import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistoryPageResult;
+import gen.org.tkit.onecx.parameters.bff.clients.model.ParameterHistoryCount;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterHistoryDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterHistoryPageResultDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterHistoryCountDTO;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
 import io.quarkus.test.junit.QuarkusTest;
 

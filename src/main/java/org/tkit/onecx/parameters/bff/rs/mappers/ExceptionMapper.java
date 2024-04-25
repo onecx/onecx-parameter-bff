@@ -1,4 +1,4 @@
-package io.github.onecx.parameters.bff.rs.mappers;
+package org.tkit.onecx.parameters.bff.rs.mappers;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -17,9 +17,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.tkit.quarkus.rs.mappers.OffsetDateTimeMapper;
 
-import gen.io.github.onecx.parameters.bff.rs.internal.model.ProblemDetailInvalidParamDTO;
-import gen.io.github.onecx.parameters.bff.rs.internal.model.ProblemDetailParamDTO;
-import gen.io.github.onecx.parameters.bff.rs.internal.model.ProblemDetailResponseDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ProblemDetailInvalidParamDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ProblemDetailParamDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ProblemDetailResponseDTO;
 import gen.org.tkit.onecx.permission.model.ProblemDetailResponse;
 
 @Mapper(uses = { OffsetDateTimeMapper.class })

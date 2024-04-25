@@ -1,4 +1,4 @@
-package io.github.onecx.parameters.bff.rs;
+package org.tkit.onecx.parameters.bff.rs;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 

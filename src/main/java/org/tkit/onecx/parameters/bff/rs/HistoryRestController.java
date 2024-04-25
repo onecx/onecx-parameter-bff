@@ -1,4 +1,4 @@
-package io.github.onecx.parameters.bff.rs;
+package org.tkit.onecx.parameters.bff.rs;
 
 import java.util.List;
 
@@ -10,14 +10,14 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.reactive.ClientWebApplicationException;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
+import org.tkit.onecx.parameters.bff.rs.mappers.ExceptionMapper;
+import org.tkit.onecx.parameters.bff.rs.mappers.ParametersMapper;
 
-import gen.io.github.onecx.parameters.bff.clients.api.HistoriesApi;
-import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameterHistory;
-import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameterHistoryPageResult;
-import gen.io.github.onecx.parameters.bff.clients.model.ParameterHistoryCount;
-import gen.io.github.onecx.parameters.bff.rs.internal.HistoriesApiService;
-import io.github.onecx.parameters.bff.rs.mappers.ExceptionMapper;
-import io.github.onecx.parameters.bff.rs.mappers.ParametersMapper;
+import gen.org.tkit.onecx.parameters.bff.clients.api.HistoriesApi;
+import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistory;
+import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistoryPageResult;
+import gen.org.tkit.onecx.parameters.bff.clients.model.ParameterHistoryCount;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.HistoriesApiService;
 
 @ApplicationScoped
 @Transactional(value = Transactional.TxType.NOT_SUPPORTED)

@@ -1,4 +1,4 @@
-package io.github.onecx.parameters.bff.rs;
+package org.tkit.onecx.parameters.bff.rs;
 
 import java.util.List;
 
@@ -12,18 +12,18 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.reactive.ClientWebApplicationException;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
+import org.tkit.onecx.parameters.bff.rs.mappers.ExceptionMapper;
+import org.tkit.onecx.parameters.bff.rs.mappers.ParametersMapper;
 
-import gen.io.github.onecx.parameters.bff.clients.api.ParametersApi;
-import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameter;
-import gen.io.github.onecx.parameters.bff.clients.model.ApplicationParameterPageResult;
-import gen.io.github.onecx.parameters.bff.clients.model.ApplicationsPageResult;
-import gen.io.github.onecx.parameters.bff.clients.model.KeysPageResult;
-import gen.io.github.onecx.parameters.bff.rs.internal.ParametersApiService;
-import gen.io.github.onecx.parameters.bff.rs.internal.model.ApplicationParameterCreateDTO;
-import gen.io.github.onecx.parameters.bff.rs.internal.model.ApplicationParameterUpdateDTO;
-import gen.io.github.onecx.parameters.bff.rs.internal.model.ProblemDetailResponseDTO;
-import io.github.onecx.parameters.bff.rs.mappers.ExceptionMapper;
-import io.github.onecx.parameters.bff.rs.mappers.ParametersMapper;
+import gen.org.tkit.onecx.parameters.bff.clients.api.ParametersApi;
+import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameter;
+import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterPageResult;
+import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationsPageResult;
+import gen.org.tkit.onecx.parameters.bff.clients.model.KeysPageResult;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.ParametersApiService;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterCreateDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterUpdateDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ProblemDetailResponseDTO;
 
 @ApplicationScoped
 @Transactional(value = Transactional.TxType.NOT_SUPPORTED)

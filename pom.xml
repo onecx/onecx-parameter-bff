@@ -127,8 +127,8 @@
                         </goals>
                         <configuration>
                             <inputSpec>src/main/openapi/openapi-bff.yaml</inputSpec>
-                            <apiPackage>gen.io.github.onecx.parameters.bff.rs.internal</apiPackage>
-                            <modelPackage>gen.io.github.onecx.parameters.bff.rs.internal.model</modelPackage>
+                            <apiPackage>gen.org.tkit.onecx.parameters.bff.rs.internal</apiPackage>
+                            <modelPackage>gen.org.tkit.onecx.parameters.bff.rs.internal.model</modelPackage>
                         </configuration>
                     </execution>
                 </executions>
