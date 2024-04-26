@@ -32,4 +32,8 @@ public interface ParametersMapper {
 
     @Mapping(target = "value", source = "setValue")
     ApplicationParameterDTO map(ApplicationParameter applicationParameter);
+
+    ApplicationParameterHistoryCriteria map(ApplicationParameterHistoryCriteriaDTO criteriaDTO);
+
+    ParameterHistoryCountCriteria map(ParameterHistoryCountCriteriaDTO criteriaDTO);
 }

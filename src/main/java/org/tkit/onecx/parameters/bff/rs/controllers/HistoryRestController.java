@@ -1,7 +1,5 @@
 package org.tkit.onecx.parameters.bff.rs.controllers;
 
-import java.util.List;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -19,6 +17,8 @@ import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHisto
 import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistoryPageResult;
 import gen.org.tkit.onecx.parameters.bff.clients.model.ParameterHistoryCount;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.HistoriesApiService;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterHistoryCriteriaDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterHistoryCountCriteriaDTO;
 
 @ApplicationScoped
 @Transactional(value = Transactional.TxType.NOT_SUPPORTED)
@@ -36,19 +36,17 @@ public class HistoryRestController implements HistoriesApiService {
     ExceptionMapper exceptionMapper;
 
     @Override
-    public Response getAllApplicationParametersHistory(String applicationId, String key, Integer pageNumber, Integer pageSize,
-            List<String> type) {
-        try (Response response = client.getAllApplicationParametersHistory(applicationId, key, pageNumber, pageSize, type)) {
+    public Response getAllApplicationParametersHistory(ApplicationParameterHistoryCriteriaDTO criteriaDTO) {
+        var criteria = mapper.map(criteriaDTO);
+        try (Response response = client.getAllApplicationParametersHistory(criteria)) {
             return Response.status(response.getStatus())
                     .entity(mapper.map(response.readEntity(ApplicationParameterHistoryPageResult.class))).build();
         }
     }
 
     @Override
-    public Response getAllApplicationParametersHistoryLatest(String applicationId, String key, Integer pageNumber,
-            Integer pageSize, List<String> type) {
-        try (Response response = client.getAllApplicationParametersHistoryLatest(applicationId, key, pageNumber, pageSize,
-                type)) {
+    public Response getAllApplicationParametersHistoryLatest(ApplicationParameterHistoryCriteriaDTO criteriaDTO) {
+        try (Response response = client.getAllApplicationParametersHistoryLatest(mapper.map(criteriaDTO))) {
             var result = mapper.map(response.readEntity(ApplicationParameterHistoryPageResult.class));
             return Response.status(response.getStatus()).entity(result).build();
         }
@@ -63,9 +61,9 @@ public class HistoryRestController implements HistoriesApiService {
     }
 
     @Override
-    public Response getCountsByCriteria(String applicationId, String key, Integer pageNumber, Integer pageSize,
-            List<String> type) {
-        try (Response response = client.getCountsByCriteria(applicationId, key, pageNumber, pageSize, type)) {
+    public Response getCountsByCriteria(ParameterHistoryCountCriteriaDTO criteriaDTO) {
+        var criteria = mapper.map(criteriaDTO);
+        try (Response response = client.getCountsByCriteria(criteria)) {
             return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(ParameterHistoryCount[].class)))
                     .build();
         }

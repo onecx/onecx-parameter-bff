@@ -53,7 +53,7 @@ class HistoryRestControllerTest extends AbstractTest {
         data.setStream(List.of(h1, h2));
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories").withMethod(HttpMethod.GET))
+        mockServerClient.when(request().withPath("/histories").withMethod(HttpMethod.POST))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
@@ -64,7 +64,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("/histories")
+                .post("/histories")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -97,7 +97,7 @@ class HistoryRestControllerTest extends AbstractTest {
         data.setStream(List.of(h1, h2));
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories/latest").withMethod(HttpMethod.GET))
+        mockServerClient.when(request().withPath("/histories/latest").withMethod(HttpMethod.POST))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
@@ -108,7 +108,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("/histories/latest")
+                .post("/histories/latest")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -165,7 +165,7 @@ class HistoryRestControllerTest extends AbstractTest {
         var data = List.of(c1, c2);
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories/counts").withMethod(HttpMethod.GET))
+        mockServerClient.when(request().withPath("/histories/counts").withMethod(HttpMethod.POST))
                 .withPriority(100)
                 .withId("mock")
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
@@ -177,7 +177,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("/histories/counts")
+                .post("/histories/counts")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
