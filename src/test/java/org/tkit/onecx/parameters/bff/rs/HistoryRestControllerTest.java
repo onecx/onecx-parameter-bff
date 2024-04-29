@@ -20,9 +20,7 @@ import org.mockserver.model.MediaType;
 import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistory;
 import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistoryPageResult;
 import gen.org.tkit.onecx.parameters.bff.clients.model.ParameterHistoryCount;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterHistoryDTO;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterHistoryPageResultDTO;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterHistoryCountDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -53,7 +51,7 @@ class HistoryRestControllerTest extends AbstractTest {
         data.setStream(List.of(h1, h2));
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories").withMethod(HttpMethod.GET))
+        mockServerClient.when(request().withPath("/histories").withMethod(HttpMethod.POST))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
@@ -64,7 +62,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("/histories")
+                .post("/histories")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -97,7 +95,7 @@ class HistoryRestControllerTest extends AbstractTest {
         data.setStream(List.of(h1, h2));
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories/latest").withMethod(HttpMethod.GET))
+        mockServerClient.when(request().withPath("/histories/latest").withMethod(HttpMethod.POST))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
@@ -108,7 +106,8 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("/histories/latest")
+                .body(new ApplicationParameterHistoryCriteriaDTO())
+                .post("/histories/latest")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -165,7 +164,7 @@ class HistoryRestControllerTest extends AbstractTest {
         var data = List.of(c1, c2);
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories/counts").withMethod(HttpMethod.GET))
+        mockServerClient.when(request().withPath("/histories/counts").withMethod(HttpMethod.POST))
                 .withPriority(100)
                 .withId("mock")
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
@@ -177,7 +176,8 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("/histories/counts")
+                .body(new ParameterHistoryCountCriteriaDTO())
+                .post("/histories/counts")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)

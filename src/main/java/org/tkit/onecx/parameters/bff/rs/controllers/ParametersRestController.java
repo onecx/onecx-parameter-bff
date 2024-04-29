@@ -17,10 +17,7 @@ import org.tkit.onecx.parameters.bff.rs.mappers.ParametersMapper;
 import org.tkit.quarkus.log.cdi.LogService;
 
 import gen.org.tkit.onecx.parameters.bff.clients.api.ParametersApi;
-import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameter;
-import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterPageResult;
-import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationsPageResult;
-import gen.org.tkit.onecx.parameters.bff.clients.model.KeysPageResult;
+import gen.org.tkit.onecx.parameters.bff.clients.model.*;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.ParametersApiService;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterCreateDTO;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterUpdateDTO;
@@ -56,9 +53,11 @@ public class ParametersRestController implements ParametersApiService {
     }
 
     @Override
-    public Response getAllApplicationParameters(String applicationId, String key, String name, Integer pageNumber,
+    public Response getAllApplicationParameters(String applicationId, String productName, String key, String name,
+            Integer pageNumber,
             Integer pageSize, List<String> type) {
-        try (Response response = client.getAllApplicationParameters(applicationId, key, name, pageNumber, pageSize, type)) {
+        try (Response response = client.getAllApplicationParameters(applicationId, productName, key, name, pageNumber, pageSize,
+                type)) {
             var result = mapper.map(response.readEntity(ApplicationParameterPageResult.class));
             return Response.status(response.getStatus()).entity(result).build();
         }
@@ -73,8 +72,8 @@ public class ParametersRestController implements ParametersApiService {
     }
 
     @Override
-    public Response getAllKeys(String applicationId) {
-        try (Response response = client.getAllKeys(applicationId)) {
+    public Response getAllKeys(String applicationId, String productName) {
+        try (Response response = client.getAllKeys(applicationId, productName)) {
             return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(KeysPageResult.class))).build();
         }
     }
