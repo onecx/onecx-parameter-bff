@@ -235,7 +235,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationsPageResult'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
         "400":
           description: Bad Request
           content:
@@ -363,8 +365,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
+  /products/search:
+    post:
+      x-onecx:
+        permissions:
+          product:
+            - read
+      tags:
+        - products
+      description: search all products of product-store
+      operationId: searchAllAvailableProducts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductStoreSearchCriteria'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductStorePageResult'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
 components:
   schemas:
+    ProductStoreSearchCriteria:
+      type: object
+      properties:
+        pageNumber:
+          format: int32
+          description: The number of page.
+          default: 0
+          type: integer
+        pageSize:
+          format: int32
+          description: The size of page
+          default: 100
+          type: integer
+    ProductStorePageResult:
+      type: object
+      properties:
+        totalElements:
+          format: int64
+          description: The total elements in the resource.
+          type: integer
+        number:
+          format: int32
+          type: integer
+        size:
+          format: int32
+          type: integer
+        totalPages:
+          format: int64
+          type: integer
+        stream:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
     ApplicationParameterCreate:
       type: object
       properties:
@@ -375,8 +441,6 @@ components:
         productName:
           type: string
         value:
-          type: string
-        type:
           type: string
         description:
           type: string
@@ -421,8 +485,6 @@ components:
         setValue:
           type: string
         importValue:
-          type: string
-        type:
           type: string
         unit:
           type: string
@@ -541,23 +603,12 @@ components:
         rangeTo:
           format: int32
           type: integer
-    ApplicationsPageResult:
+    Product:
       type: object
       properties:
-        totalElements:
-          format: int64
-          description: The total elements in the resource.
-          type: integer
-        number:
-          format: int32
-          type: integer
-        size:
-          format: int32
-          type: integer
-        totalPages:
-          format: int64
-          type: integer
-        stream:
+        productName:
+          type: string
+        applications:
           type: array
           items:
             type: string
