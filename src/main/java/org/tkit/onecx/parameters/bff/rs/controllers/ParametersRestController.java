@@ -66,7 +66,7 @@ public class ParametersRestController implements ParametersApiService {
     @Override
     public Response getAllApplications() {
         try (Response response = client.getAllApplications()) {
-            return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(ApplicationsPageResult.class)))
+            return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(Product[].class)))
                     .build();
         }
     }

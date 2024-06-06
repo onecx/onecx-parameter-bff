@@ -5,6 +5,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.ws.rs.HttpMethod;
@@ -29,12 +30,11 @@ class ParametersRestControllerTest extends AbstractTest {
     @Test
     void getAllApplicationsTest() {
 
-        ApplicationsPageResult data = new ApplicationsPageResult();
-        data.setNumber(1);
-        data.setSize(3);
-        data.setTotalElements(3L);
-        data.setTotalPages(1L);
-        data.setStream(List.of("app1", "app2", "app3"));
+        List<Product> data = new ArrayList<>();
+        Product product = new Product();
+        product.setProductName("p1");
+        product.setApplications(List.of("app1", "app2", "app3"));
+        data.add(product);
 
         // create mock rest endpoint
         mockServerClient.when(request().withPath("/parameters/applications").withMethod(HttpMethod.GET))
@@ -52,11 +52,11 @@ class ParametersRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ApplicationsPageResultDTO.class);
+                .extract().as(ProductDTO[].class);
 
         Assertions.assertNotNull(output);
-        Assertions.assertEquals(data.getSize(), output.getSize());
-        Assertions.assertEquals(data.getStream(), output.getStream());
+        Assertions.assertEquals(data.size(), output.length);
+        Assertions.assertEquals(data.get(0).getApplications().size(), output[0].getApplications().size());
     }
 
     @Test
@@ -85,7 +85,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ApplicationsPageResultDTO.class);
+                .extract().as(KeysPageResultDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getSize(), output.getSize());

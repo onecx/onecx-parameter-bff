@@ -1,5 +1,7 @@
 package org.tkit.onecx.parameters.bff.rs.mappers;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.tkit.quarkus.rs.mappers.OffsetDateTimeMapper;
@@ -25,7 +27,10 @@ public interface ParametersMapper {
     ApplicationParameterPageResultDTO map(ApplicationParameterPageResult applicationParameterPageResult);
 
     @Mapping(target = "removeStreamItem", ignore = true)
-    ApplicationsPageResultDTO map(ApplicationsPageResult applicationsPageResult);
+    List<ProductDTO> map(Product[] products);
+
+    @Mapping(target = "removeApplicationsItem", ignore = true)
+    ProductDTO map(Product product);
 
     @Mapping(target = "removeStreamItem", ignore = true)
     KeysPageResultDTO map(KeysPageResult keysPageResult);
