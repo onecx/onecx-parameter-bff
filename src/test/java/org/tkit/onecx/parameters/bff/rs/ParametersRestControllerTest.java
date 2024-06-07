@@ -181,7 +181,7 @@ class ParametersRestControllerTest extends AbstractTest {
     }
 
     @Test
-    void getAllApplicationParametersTest() {
+    void searchApplicationParametersTest() {
         ApplicationParameter p1 = new ApplicationParameter();
         p1.setId("1");
         p1.setKey("key2");
@@ -200,7 +200,9 @@ class ParametersRestControllerTest extends AbstractTest {
         data.setStream(List.of(p1, p2));
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/parameters").withMethod(HttpMethod.GET))
+        mockServerClient.when(request().withPath("/parameters/search").withMethod(HttpMethod.POST)
+                .withContentType(MediaType.APPLICATION_JSON)
+                .withBody(JsonBody.json(new ParameterSearchCriteria().applicationId("app1").pageNumber(0).pageSize(5))))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
@@ -211,7 +213,8 @@ class ParametersRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("/parameters")
+                .body(new ParameterSearchCriteriaDTO().applicationId("app1").pageNumber(0).pageSize(5))
+                .post("/parameters/search")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)

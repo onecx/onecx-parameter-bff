@@ -1,7 +1,5 @@
 package org.tkit.onecx.parameters.bff.rs.controllers;
 
-import java.util.List;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -21,6 +19,7 @@ import gen.org.tkit.onecx.parameters.bff.clients.model.*;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.ParametersApiService;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterCreateDTO;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterUpdateDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterSearchCriteriaDTO;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ProblemDetailResponseDTO;
 
 @ApplicationScoped
@@ -53,11 +52,8 @@ public class ParametersRestController implements ParametersApiService {
     }
 
     @Override
-    public Response getAllApplicationParameters(String applicationId, String productName, String key, String name,
-            Integer pageNumber,
-            Integer pageSize, List<String> type) {
-        try (Response response = client.getAllApplicationParameters(applicationId, productName, key, name, pageNumber, pageSize,
-                type)) {
+    public Response searchApplicationParametersByCriteria(ParameterSearchCriteriaDTO criteriaDTO) {
+        try (Response response = client.searchApplicationParametersByCriteria(mapper.mapCriteria(criteriaDTO))) {
             var result = mapper.map(response.readEntity(ApplicationParameterPageResult.class));
             return Response.status(response.getStatus()).entity(result).build();
         }
