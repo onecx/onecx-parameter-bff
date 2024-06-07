@@ -41,4 +41,6 @@ public interface ParametersMapper {
     ApplicationParameterHistoryCriteria map(ApplicationParameterHistoryCriteriaDTO criteriaDTO);
 
     ParameterHistoryCountCriteria map(ParameterHistoryCountCriteriaDTO criteriaDTO);
+
+    ParameterSearchCriteria mapCriteria(ParameterSearchCriteriaDTO criteriaDTO);
 }
