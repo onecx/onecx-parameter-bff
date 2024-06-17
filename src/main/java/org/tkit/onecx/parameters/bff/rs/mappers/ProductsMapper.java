@@ -30,7 +30,9 @@ public interface ProductsMapper {
 
     default List<String> map(List<MicroserviceAbstractPSV1> apps) {
         List<String> appIds = new ArrayList<>();
-        apps.forEach(microserviceAbstractPSV1 -> appIds.add(microserviceAbstractPSV1.getAppId()));
+        if (!apps.isEmpty()) {
+            apps.forEach(microserviceAbstractPSV1 -> appIds.add(microserviceAbstractPSV1.getAppId()));
+        }
         return appIds;
     }
 }
