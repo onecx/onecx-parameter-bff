@@ -352,9 +352,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProductStorePageResult'
+                $ref: '#/components/schemas/ProductStorePageResult'
         "400":
           description: Bad Request
           content:
@@ -375,6 +373,7 @@ components:
           format: int32
           description: The size of page
           default: 100
+          maximum: 1000
           type: integer
     ProductStorePageResult:
       type: object
