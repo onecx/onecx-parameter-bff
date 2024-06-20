@@ -16,7 +16,6 @@ onecx.permissions.application-id=${quarkus.application.name}
 org.eclipse.microprofile.rest.client.propagateHeaders=apm-principal-token
 %prod.quarkus.rest-client.onecx_parameter_internal.url=http://onecx-parameter-svc:8080
 %prod.quarkus.rest-client.onecx_product_store_v1.url=http://onecx-product-store-svc:8080
-%prod.quarkus.oidc-client.client-id=${quarkus.application.name}
 quarkus.openapi-generator.codegen.input-base-dir=target/tmp/openapi
 quarkus.openapi-generator.codegen.spec.onecx_parameter_svc_yaml.config-key=onecx_parameter_internal
 quarkus.openapi-generator.codegen.spec.onecx_parameter_svc_yaml.base-package=gen.org.tkit.onecx.parameters.bff.clients
@@ -29,6 +28,9 @@ quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.return-respo
 quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.additional-api-type-annotations=@org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.additional-model-type-annotations=@io.quarkus.runtime.annotations.RegisterForReflection;
 quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.model-name-suffix=PSV1
+%prod.quarkus.rest-client.onecx_parameter_svc_yaml.providers=io.quarkus.oidc.client.reactive.filter.OidcClientRequestReactiveFilter
+%prod.quarkus.rest-client.onecx_product_store_svc_yaml.providers=io.quarkus.oidc.client.reactive.filter.OidcClientRequestReactiveFilter
+%prod.quarkus.oidc-client.client-id=${quarkus.application.name}
 ----
 ====
 
@@ -66,5 +68,8 @@ app:
             delete: permission on all DELETE requests
           product:
             read: permission on all GET requests and POST search
+    keycloak:
+      client:
+        enabled: true
 ----
 

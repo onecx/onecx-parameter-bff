@@ -14,3 +14,6 @@ app:
             delete: permission on all DELETE requests
           product:
             read: permission on all GET requests and POST search
+    keycloak:
+      client:
+        enabled: true
