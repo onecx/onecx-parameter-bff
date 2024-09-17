@@ -29,6 +29,7 @@ public interface ParametersMapper {
     @Mapping(target = "removeStreamItem", ignore = true)
     List<ProductDTO> map(Product[] products);
 
+    @Mapping(target = "displayName", ignore = true)
     @Mapping(target = "removeApplicationsItem", ignore = true)
     ProductDTO map(Product product);
 
