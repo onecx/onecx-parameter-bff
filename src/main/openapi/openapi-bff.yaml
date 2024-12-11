@@ -1,11 +1,11 @@
 ---
 openapi: 3.0.3
 info:
-  title: onecx-parameters-bff
-  description: OneCx parameters Bff
+  title: onecx-parameter-bff
+  description: OneCX parameter Bff
   version: "2.0"
 servers:
-  - url: http://onecx-parameters-bff:8080/
+  - url: http://onecx-parameter-bff:8080/
 tags:
   - name: histories
   - name: parameters
