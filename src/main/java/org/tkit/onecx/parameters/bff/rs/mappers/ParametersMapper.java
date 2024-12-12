@@ -12,19 +12,19 @@ import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
 @Mapper(uses = { OffsetDateTimeMapper.class })
 public interface ParametersMapper {
 
-    ApplicationParameterCreate map(ApplicationParameterCreateDTO dto);
+    ApplicationParameterCreate map(ParameterCreateDTO dto);
 
-    ApplicationParameterUpdate mapUpdate(ApplicationParameterUpdateDTO dto);
+    ApplicationParameterUpdate mapUpdate(ParameterUpdateDTO dto);
 
     @Mapping(target = "removeStreamItem", ignore = true)
-    ApplicationParameterHistoryPageResultDTO map(ApplicationParameterHistoryPageResult applicationParameterHistoryPageResult);
+    ParameterHistoryPageResultDTO map(ApplicationParameterHistoryPageResult applicationParameterHistoryPageResult);
 
-    ApplicationParameterHistoryDTO map(ApplicationParameterHistory applicationParameterHistory);
+    ParameterHistoryDTO map(ApplicationParameterHistory applicationParameterHistory);
 
     ParameterHistoryCountDTO[] map(ParameterHistoryCount[] parameterHistoryCount);
 
     @Mapping(target = "removeStreamItem", ignore = true)
-    ApplicationParameterPageResultDTO map(ApplicationParameterPageResult applicationParameterPageResult);
+    ParameterPageResultDTO map(ApplicationParameterPageResult applicationParameterPageResult);
 
     @Mapping(target = "removeStreamItem", ignore = true)
     List<ProductDTO> map(Product[] products);
@@ -37,9 +37,9 @@ public interface ParametersMapper {
     KeysPageResultDTO map(KeysPageResult keysPageResult);
 
     @Mapping(target = "value", source = "setValue")
-    ApplicationParameterDTO map(ApplicationParameter applicationParameter);
+    ParameterDTO map(ApplicationParameter applicationParameter);
 
-    ApplicationParameterHistoryCriteria map(ApplicationParameterHistoryCriteriaDTO criteriaDTO);
+    ApplicationParameterHistoryCriteria map(ParameterHistoryCriteriaDTO criteriaDTO);
 
     ParameterHistoryCountCriteria map(ParameterHistoryCountCriteriaDTO criteriaDTO);
 

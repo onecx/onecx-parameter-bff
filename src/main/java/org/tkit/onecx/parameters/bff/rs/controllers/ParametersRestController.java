@@ -17,9 +17,9 @@ import org.tkit.quarkus.log.cdi.LogService;
 import gen.org.tkit.onecx.parameters.bff.clients.api.ParametersApi;
 import gen.org.tkit.onecx.parameters.bff.clients.model.*;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.ParametersApiService;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterCreateDTO;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterUpdateDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterCreateDTO;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterSearchCriteriaDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterUpdateDTO;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ProblemDetailResponseDTO;
 
 @ApplicationScoped
@@ -38,7 +38,7 @@ public class ParametersRestController implements ParametersApiService {
     ExceptionMapper exceptionMapper;
 
     @Override
-    public Response createParameterValue(ApplicationParameterCreateDTO applicationParameterCreateDTO) {
+    public Response createParameterValue(ParameterCreateDTO applicationParameterCreateDTO) {
         try (Response response = client.createParameterValue(mapper.map(applicationParameterCreateDTO))) {
             return Response.status(response.getStatus()).build();
         }
@@ -52,7 +52,7 @@ public class ParametersRestController implements ParametersApiService {
     }
 
     @Override
-    public Response searchApplicationParametersByCriteria(ParameterSearchCriteriaDTO criteriaDTO) {
+    public Response searchParametersByCriteria(ParameterSearchCriteriaDTO criteriaDTO) {
         try (Response response = client.searchApplicationParametersByCriteria(mapper.mapCriteria(criteriaDTO))) {
             var result = mapper.map(response.readEntity(ApplicationParameterPageResult.class));
             return Response.status(response.getStatus()).entity(result).build();
@@ -83,7 +83,7 @@ public class ParametersRestController implements ParametersApiService {
     }
 
     @Override
-    public Response updateParameterValue(String id, ApplicationParameterUpdateDTO applicationParameterUpdateDTO) {
+    public Response updateParameterValue(String id, ParameterUpdateDTO applicationParameterUpdateDTO) {
         try (Response response = client.updateParameterValue(id, mapper.mapUpdate(applicationParameterUpdateDTO))) {
             return Response.status(response.getStatus()).build();
         }

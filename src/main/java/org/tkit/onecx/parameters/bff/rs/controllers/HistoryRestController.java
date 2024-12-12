@@ -17,8 +17,8 @@ import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHisto
 import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistoryPageResult;
 import gen.org.tkit.onecx.parameters.bff.clients.model.ParameterHistoryCount;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.HistoriesApiService;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ApplicationParameterHistoryCriteriaDTO;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterHistoryCountCriteriaDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterHistoryCriteriaDTO;
 
 @ApplicationScoped
 @Transactional(value = Transactional.TxType.NOT_SUPPORTED)
@@ -36,7 +36,7 @@ public class HistoryRestController implements HistoriesApiService {
     ExceptionMapper exceptionMapper;
 
     @Override
-    public Response getAllApplicationParametersHistory(ApplicationParameterHistoryCriteriaDTO criteriaDTO) {
+    public Response getAllParametersHistory(ParameterHistoryCriteriaDTO criteriaDTO) {
         var criteria = mapper.map(criteriaDTO);
         try (Response response = client.getAllApplicationParametersHistory(criteria)) {
             return Response.status(response.getStatus())
@@ -45,7 +45,7 @@ public class HistoryRestController implements HistoriesApiService {
     }
 
     @Override
-    public Response getAllApplicationParametersHistoryLatest(ApplicationParameterHistoryCriteriaDTO criteriaDTO) {
+    public Response getAllParametersHistoryLatest(ParameterHistoryCriteriaDTO criteriaDTO) {
         try (Response response = client.getAllApplicationParametersHistoryLatest(mapper.map(criteriaDTO))) {
             var result = mapper.map(response.readEntity(ApplicationParameterHistoryPageResult.class));
             return Response.status(response.getStatus()).entity(result).build();
@@ -53,7 +53,7 @@ public class HistoryRestController implements HistoriesApiService {
     }
 
     @Override
-    public Response getApplicationParametersHistoryById(String id) {
+    public Response getParametersHistoryById(String id) {
         try (Response response = client.getApplicationParametersHistoryById(id)) {
             return Response.status(response.getStatus())
                     .entity(mapper.map(response.readEntity(ApplicationParameterHistory.class))).build();
