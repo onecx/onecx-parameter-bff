@@ -397,6 +397,10 @@ components:
             $ref: '#/components/schemas/Product'
     ParameterCreate:
       type: object
+      required:
+        - key
+        - productName
+        - applicationId
       properties:
         key:
           type: string

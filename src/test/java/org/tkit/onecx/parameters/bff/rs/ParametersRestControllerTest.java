@@ -97,6 +97,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         ApplicationParameterCreate data = new ApplicationParameterCreate();
         data.setApplicationId("app1");
+        data.setProductName("product1");
+        data.setKey("key1");
         data.setValue("value1");
 
         // create mock rest endpoint
@@ -109,6 +111,8 @@ class ParametersRestControllerTest extends AbstractTest {
         ParameterCreateDTO input = new ParameterCreateDTO();
         input.setApplicationId("app1");
         input.setValue("value1");
+        input.setProductName("product1");
+        input.setKey("key1");
 
         given()
                 .when()
