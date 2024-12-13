@@ -450,18 +450,10 @@ components:
           type: string
         key:
           type: string
-        setValue:
-          type: string
+        value:
+          type: object
         importValue:
-          type: string
-        unit:
-          type: string
-        rangeFrom:
-          format: int32
-          type: integer
-        rangeTo:
-          format: int32
-          type: integer
+          type: object
     ParameterHistory:
       type: object
       required:
@@ -494,9 +486,9 @@ components:
         key:
           type: string
         usedValue:
-          type: string
+          type: object
         defaultValue:
-          type: string
+          type: object
         type:
           type: string
         instanceId:

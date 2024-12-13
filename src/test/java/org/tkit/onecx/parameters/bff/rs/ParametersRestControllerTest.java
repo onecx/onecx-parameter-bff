@@ -17,8 +17,8 @@ import org.mockserver.client.MockServerClient;
 import org.mockserver.model.JsonBody;
 import org.mockserver.model.MediaType;
 
-import gen.org.tkit.onecx.parameters.bff.clients.model.*;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
+import gen.org.tkit.onecx.parameters.clients.model.*;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -95,7 +95,7 @@ class ParametersRestControllerTest extends AbstractTest {
     @Test
     void createParameterValueTest() {
 
-        ApplicationParameterCreate data = new ApplicationParameterCreate();
+        ParameterCreate data = new ParameterCreate();
         data.setApplicationId("app1");
         data.setProductName("product1");
         data.setKey("key1");
@@ -186,17 +186,17 @@ class ParametersRestControllerTest extends AbstractTest {
 
     @Test
     void searchApplicationParametersTest() {
-        ApplicationParameter p1 = new ApplicationParameter();
+        Parameter p1 = new Parameter();
         p1.setId("1");
         p1.setKey("key2");
         p1.setValue("value1");
 
-        ApplicationParameter p2 = new ApplicationParameter();
+        Parameter p2 = new Parameter();
         p2.setId("2");
         p2.setKey("key2");
         p2.setValue("value2");
 
-        ApplicationParameterPageResult data = new ApplicationParameterPageResult();
+        ParameterPageResult data = new ParameterPageResult();
         data.setNumber(1);
         data.setSize(2);
         data.setTotalElements(2L);
@@ -232,7 +232,7 @@ class ParametersRestControllerTest extends AbstractTest {
     @Test
     void getParameterByIdTest() {
 
-        ApplicationParameter data = new ApplicationParameter();
+        Parameter data = new Parameter();
         data.setId("test-id-1");
         data.setApplicationId("app1");
         data.setValue("value1");
@@ -267,7 +267,7 @@ class ParametersRestControllerTest extends AbstractTest {
 
         String id = "test-update-1";
 
-        ApplicationParameterUpdate data = new ApplicationParameterUpdate();
+        ParameterUpdate data = new ParameterUpdate();
         data.description("description");
         data.setValue("value1");
 

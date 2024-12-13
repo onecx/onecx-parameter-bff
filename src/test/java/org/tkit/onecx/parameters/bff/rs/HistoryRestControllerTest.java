@@ -17,10 +17,10 @@ import org.mockserver.client.MockServerClient;
 import org.mockserver.model.JsonBody;
 import org.mockserver.model.MediaType;
 
-import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistory;
-import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistoryPageResult;
-import gen.org.tkit.onecx.parameters.bff.clients.model.ParameterHistoryCount;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
+import gen.org.tkit.onecx.parameters.clients.model.ParameterHistory;
+import gen.org.tkit.onecx.parameters.clients.model.ParameterHistoryCount;
+import gen.org.tkit.onecx.parameters.clients.model.ParameterHistoryPageResult;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -33,17 +33,17 @@ class HistoryRestControllerTest extends AbstractTest {
     @Test
     void getAllApplicationParametersHistoryTest() {
 
-        ApplicationParameterHistory h1 = new ApplicationParameterHistory();
+        ParameterHistory h1 = new ParameterHistory();
         h1.setId("1");
         h1.setKey("key2");
         h1.setUsedValue("value1");
 
-        ApplicationParameterHistory h2 = new ApplicationParameterHistory();
+        ParameterHistory h2 = new ParameterHistory();
         h2.setId("2");
         h2.setKey("key2");
         h2.setUsedValue("value2");
 
-        ApplicationParameterHistoryPageResult data = new ApplicationParameterHistoryPageResult();
+        ParameterHistoryPageResult data = new ParameterHistoryPageResult();
         data.setNumber(1);
         data.setSize(2);
         data.setTotalElements(2L);
@@ -77,17 +77,17 @@ class HistoryRestControllerTest extends AbstractTest {
     @Test
     void getAllApplicationParametersHistoryLatestTest() {
 
-        ApplicationParameterHistory h1 = new ApplicationParameterHistory();
+        ParameterHistory h1 = new ParameterHistory();
         h1.setId("1");
         h1.setKey("key2");
         h1.setUsedValue("value1");
 
-        ApplicationParameterHistory h2 = new ApplicationParameterHistory();
+        ParameterHistory h2 = new ParameterHistory();
         h2.setId("2");
         h2.setKey("key2");
         h2.setUsedValue("value2");
 
-        ApplicationParameterHistoryPageResult data = new ApplicationParameterHistoryPageResult();
+        ParameterHistoryPageResult data = new ParameterHistoryPageResult();
         data.setNumber(1);
         data.setSize(2);
         data.setTotalElements(2L);
@@ -121,7 +121,7 @@ class HistoryRestControllerTest extends AbstractTest {
     @Test
     void getApplicationParametersHistoryByIdTest() {
 
-        ApplicationParameterHistory data = new ApplicationParameterHistory();
+        ParameterHistory data = new ParameterHistory();
         data.setId("test-id-1");
         data.setApplicationId("app1");
         data.setUsedValue("value1");
