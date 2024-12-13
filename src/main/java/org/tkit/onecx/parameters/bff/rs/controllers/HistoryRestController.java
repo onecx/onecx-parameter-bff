@@ -12,13 +12,13 @@ import org.tkit.onecx.parameters.bff.rs.mappers.ExceptionMapper;
 import org.tkit.onecx.parameters.bff.rs.mappers.ParametersMapper;
 import org.tkit.quarkus.log.cdi.LogService;
 
-import gen.org.tkit.onecx.parameters.bff.clients.api.HistoriesApi;
-import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistory;
-import gen.org.tkit.onecx.parameters.bff.clients.model.ApplicationParameterHistoryPageResult;
-import gen.org.tkit.onecx.parameters.bff.clients.model.ParameterHistoryCount;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.HistoriesApiService;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterHistoryCountCriteriaDTO;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterHistoryCriteriaDTO;
+import gen.org.tkit.onecx.parameters.clients.api.HistoriesApi;
+import gen.org.tkit.onecx.parameters.clients.model.ParameterHistory;
+import gen.org.tkit.onecx.parameters.clients.model.ParameterHistoryCount;
+import gen.org.tkit.onecx.parameters.clients.model.ParameterHistoryPageResult;
 
 @ApplicationScoped
 @Transactional(value = Transactional.TxType.NOT_SUPPORTED)
@@ -38,25 +38,25 @@ public class HistoryRestController implements HistoriesApiService {
     @Override
     public Response getAllParametersHistory(ParameterHistoryCriteriaDTO criteriaDTO) {
         var criteria = mapper.map(criteriaDTO);
-        try (Response response = client.getAllApplicationParametersHistory(criteria)) {
+        try (Response response = client.getAllParametersHistory(criteria)) {
             return Response.status(response.getStatus())
-                    .entity(mapper.map(response.readEntity(ApplicationParameterHistoryPageResult.class))).build();
+                    .entity(mapper.map(response.readEntity(ParameterHistoryPageResult.class))).build();
         }
     }
 
     @Override
     public Response getAllParametersHistoryLatest(ParameterHistoryCriteriaDTO criteriaDTO) {
-        try (Response response = client.getAllApplicationParametersHistoryLatest(mapper.map(criteriaDTO))) {
-            var result = mapper.map(response.readEntity(ApplicationParameterHistoryPageResult.class));
+        try (Response response = client.getAllParametersHistoryLatest(mapper.map(criteriaDTO))) {
+            var result = mapper.map(response.readEntity(ParameterHistoryPageResult.class));
             return Response.status(response.getStatus()).entity(result).build();
         }
     }
 
     @Override
     public Response getParametersHistoryById(String id) {
-        try (Response response = client.getApplicationParametersHistoryById(id)) {
+        try (Response response = client.getParametersHistoryById(id)) {
             return Response.status(response.getStatus())
-                    .entity(mapper.map(response.readEntity(ApplicationParameterHistory.class))).build();
+                    .entity(mapper.map(response.readEntity(ParameterHistory.class))).build();
         }
     }
 

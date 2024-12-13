@@ -170,7 +170,7 @@
                             <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <url>https://raw.githubusercontent.com/onecx/onecx-parameter-svc/main/src/main/openapi/openapi-internal.yaml</url>
+                            <url>https://raw.githubusercontent.com/onecx/onecx-parameter-svc/refs/heads/feat/json/src/main/openapi/openapi-internal.yaml</url>
                             <outputDirectory>target/tmp/openapi</outputDirectory>
                             <outputFileName>onecx-parameter-svc.yaml</outputFileName>
                             <skipCache>true</skipCache>

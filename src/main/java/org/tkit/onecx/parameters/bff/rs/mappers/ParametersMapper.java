@@ -6,25 +6,25 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.tkit.quarkus.rs.mappers.OffsetDateTimeMapper;
 
-import gen.org.tkit.onecx.parameters.bff.clients.model.*;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
+import gen.org.tkit.onecx.parameters.clients.model.*;
 
 @Mapper(uses = { OffsetDateTimeMapper.class })
 public interface ParametersMapper {
 
-    ApplicationParameterCreate map(ParameterCreateDTO dto);
+    ParameterCreate map(ParameterCreateDTO dto);
 
-    ApplicationParameterUpdate mapUpdate(ParameterUpdateDTO dto);
+    ParameterUpdate mapUpdate(ParameterUpdateDTO dto);
 
     @Mapping(target = "removeStreamItem", ignore = true)
-    ParameterHistoryPageResultDTO map(ApplicationParameterHistoryPageResult applicationParameterHistoryPageResult);
+    ParameterHistoryPageResultDTO map(ParameterHistoryPageResult applicationParameterHistoryPageResult);
 
-    ParameterHistoryDTO map(ApplicationParameterHistory applicationParameterHistory);
+    ParameterHistoryDTO map(ParameterHistory applicationParameterHistory);
 
     ParameterHistoryCountDTO[] map(ParameterHistoryCount[] parameterHistoryCount);
 
     @Mapping(target = "removeStreamItem", ignore = true)
-    ParameterPageResultDTO map(ApplicationParameterPageResult applicationParameterPageResult);
+    ParameterPageResultDTO map(ParameterPageResult applicationParameterPageResult);
 
     @Mapping(target = "removeStreamItem", ignore = true)
     List<ProductDTO> map(Product[] products);
@@ -36,10 +36,10 @@ public interface ParametersMapper {
     @Mapping(target = "removeStreamItem", ignore = true)
     KeysPageResultDTO map(KeysPageResult keysPageResult);
 
-    @Mapping(target = "value", source = "setValue")
-    ParameterDTO map(ApplicationParameter applicationParameter);
+    @Mapping(target = "value", source = "value")
+    ParameterDTO map(Parameter applicationParameter);
 
-    ApplicationParameterHistoryCriteria map(ParameterHistoryCriteriaDTO criteriaDTO);
+    ParameterHistoryCriteria map(ParameterHistoryCriteriaDTO criteriaDTO);
 
     ParameterHistoryCountCriteria map(ParameterHistoryCountCriteriaDTO criteriaDTO);
 

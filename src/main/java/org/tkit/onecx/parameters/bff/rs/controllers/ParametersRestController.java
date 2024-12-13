@@ -14,13 +14,13 @@ import org.tkit.onecx.parameters.bff.rs.mappers.ExceptionMapper;
 import org.tkit.onecx.parameters.bff.rs.mappers.ParametersMapper;
 import org.tkit.quarkus.log.cdi.LogService;
 
-import gen.org.tkit.onecx.parameters.bff.clients.api.ParametersApi;
-import gen.org.tkit.onecx.parameters.bff.clients.model.*;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.ParametersApiService;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterCreateDTO;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterSearchCriteriaDTO;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterUpdateDTO;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ProblemDetailResponseDTO;
+import gen.org.tkit.onecx.parameters.clients.api.ParametersApi;
+import gen.org.tkit.onecx.parameters.clients.model.*;
 
 @ApplicationScoped
 @Transactional(value = Transactional.TxType.NOT_SUPPORTED)
@@ -39,7 +39,7 @@ public class ParametersRestController implements ParametersApiService {
 
     @Override
     public Response createParameterValue(ParameterCreateDTO applicationParameterCreateDTO) {
-        try (Response response = client.createParameterValue(mapper.map(applicationParameterCreateDTO))) {
+        try (Response response = client.createParameter(mapper.map(applicationParameterCreateDTO))) {
             return Response.status(response.getStatus()).build();
         }
     }
@@ -53,8 +53,8 @@ public class ParametersRestController implements ParametersApiService {
 
     @Override
     public Response searchParametersByCriteria(ParameterSearchCriteriaDTO criteriaDTO) {
-        try (Response response = client.searchApplicationParametersByCriteria(mapper.mapCriteria(criteriaDTO))) {
-            var result = mapper.map(response.readEntity(ApplicationParameterPageResult.class));
+        try (Response response = client.searchParametersByCriteria(mapper.mapCriteria(criteriaDTO))) {
+            var result = mapper.map(response.readEntity(ParameterPageResult.class));
             return Response.status(response.getStatus()).entity(result).build();
         }
     }
@@ -77,7 +77,7 @@ public class ParametersRestController implements ParametersApiService {
     @Override
     public Response getParameterById(String id) {
         try (Response response = client.getParameterById(id)) {
-            return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(ApplicationParameter.class)))
+            return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(Parameter.class)))
                     .build();
         }
     }
