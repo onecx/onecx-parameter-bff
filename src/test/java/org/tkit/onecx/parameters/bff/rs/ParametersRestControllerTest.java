@@ -97,6 +97,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         ApplicationParameterCreate data = new ApplicationParameterCreate();
         data.setApplicationId("app1");
+        data.setProductName("product1");
+        data.setKey("key1");
         data.setValue("value1");
 
         // create mock rest endpoint
@@ -106,9 +108,11 @@ class ParametersRestControllerTest extends AbstractTest {
                 .respond(httpRequest -> response().withStatusCode(Response.Status.NO_CONTENT.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON));
 
-        ApplicationParameterCreateDTO input = new ApplicationParameterCreateDTO();
+        ParameterCreateDTO input = new ParameterCreateDTO();
         input.setApplicationId("app1");
         input.setValue("value1");
+        input.setProductName("product1");
+        input.setKey("key1");
 
         given()
                 .when()
@@ -218,7 +222,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ApplicationParameterPageResultDTO.class);
+                .extract().as(ParameterPageResultDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getSize(), output.getSize());
@@ -251,7 +255,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ApplicationParameterDTO.class);
+                .extract().as(ParameterDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getId(), output.getId());
@@ -274,7 +278,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .respond(httpRequest -> response().withStatusCode(Response.Status.NO_CONTENT.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON));
 
-        ApplicationParameterUpdateDTO input = new ApplicationParameterUpdateDTO();
+        ParameterUpdateDTO input = new ParameterUpdateDTO();
         input.description("description");
         input.setValue("value1");
 

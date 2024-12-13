@@ -66,7 +66,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ApplicationParameterHistoryPageResultDTO.class);
+                .extract().as(ParameterHistoryPageResultDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getSize(), output.getSize());
@@ -106,12 +106,12 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .body(new ApplicationParameterHistoryCriteriaDTO())
+                .body(new ParameterHistoryCriteriaDTO())
                 .post("/histories/latest")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ApplicationParameterHistoryPageResultDTO.class);
+                .extract().as(ParameterHistoryPageResultDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getSize(), output.getSize());
@@ -144,7 +144,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ApplicationParameterHistoryDTO.class);
+                .extract().as(ParameterHistoryDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getId(), output.getId());
