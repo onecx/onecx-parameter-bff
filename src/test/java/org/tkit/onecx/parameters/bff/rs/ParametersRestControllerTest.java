@@ -112,7 +112,7 @@ class ParametersRestControllerTest extends AbstractTest {
         input.setApplicationId("app1");
         input.setValue("value1");
         input.setProductName("product1");
-        input.setKey("key1");
+        input.setName("key1");
 
         given()
                 .when()
@@ -124,7 +124,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        //create with no body should return BAD_REQUEST
+        //create with nobody should return BAD_REQUEST
         given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))

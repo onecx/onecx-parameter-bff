@@ -66,7 +66,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ParameterHistoryPageResultDTO.class);
+                .extract().as(HistoryPageResultDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getSize(), output.getSize());
@@ -106,12 +106,12 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .body(new ParameterHistoryCriteriaDTO())
+                .body(new HistoryCriteriaDTO())
                 .post("/histories/latest")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ParameterHistoryPageResultDTO.class);
+                .extract().as(HistoryPageResultDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getSize(), output.getSize());
@@ -144,7 +144,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ParameterHistoryDTO.class);
+                .extract().as(HistoryDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getId(), output.getId());
@@ -176,12 +176,12 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .body(new ParameterHistoryCountCriteriaDTO())
+                .body(new HistoryCountCriteriaDTO())
                 .post("/histories/counts")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ParameterHistoryCountDTO[].class);
+                .extract().as(HistoryCountDTO[].class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.size(), output.length);

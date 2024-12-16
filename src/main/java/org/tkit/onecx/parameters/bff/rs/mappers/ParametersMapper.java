@@ -12,16 +12,18 @@ import gen.org.tkit.onecx.parameters.clients.model.*;
 @Mapper(uses = { OffsetDateTimeMapper.class })
 public interface ParametersMapper {
 
+    @Mapping(target = "key", source = "name")
     ParameterCreate map(ParameterCreateDTO dto);
 
     ParameterUpdate mapUpdate(ParameterUpdateDTO dto);
 
     @Mapping(target = "removeStreamItem", ignore = true)
-    ParameterHistoryPageResultDTO map(ParameterHistoryPageResult applicationParameterHistoryPageResult);
+    HistoryPageResultDTO map(ParameterHistoryPageResult applicationParameterHistoryPageResult);
 
-    ParameterHistoryDTO map(ParameterHistory applicationParameterHistory);
+    @Mapping(target = "name", source = "key")
+    HistoryDTO map(ParameterHistory applicationParameterHistory);
 
-    ParameterHistoryCountDTO[] map(ParameterHistoryCount[] parameterHistoryCount);
+    HistoryCountDTO[] map(ParameterHistoryCount[] parameterHistoryCount);
 
     @Mapping(target = "removeStreamItem", ignore = true)
     ParameterPageResultDTO map(ParameterPageResult applicationParameterPageResult);
@@ -36,12 +38,16 @@ public interface ParametersMapper {
     @Mapping(target = "removeStreamItem", ignore = true)
     KeysPageResultDTO map(KeysPageResult keysPageResult);
 
-    @Mapping(target = "value", source = "value")
+    @Mapping(target = "displayName", source = "name")
+    @Mapping(target = "name", source = "key")
     ParameterDTO map(Parameter applicationParameter);
 
-    ParameterHistoryCriteria map(ParameterHistoryCriteriaDTO criteriaDTO);
+    @Mapping(target = "key", source = "name")
+    ParameterHistoryCriteria map(HistoryCriteriaDTO criteriaDTO);
 
-    ParameterHistoryCountCriteria map(ParameterHistoryCountCriteriaDTO criteriaDTO);
+    @Mapping(target = "key", source = "name")
+    ParameterHistoryCountCriteria map(HistoryCountCriteriaDTO criteriaDTO);
 
+    @Mapping(target = "key", source = "name")
     ParameterSearchCriteria mapCriteria(ParameterSearchCriteriaDTO criteriaDTO);
 }

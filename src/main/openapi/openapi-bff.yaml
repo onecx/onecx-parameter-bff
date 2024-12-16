@@ -18,20 +18,20 @@ paths:
             - read
       tags:
         - histories
-      description: Find all parameters history
-      operationId: getAllParametersHistory
+      description: Find all history entries
+      operationId: getAllHistory
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ParameterHistoryCriteria'
+              $ref: '#/components/schemas/HistoryCriteria'
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ParameterHistoryPageResult'
+                $ref: '#/components/schemas/HistoryPageResult'
         "400":
           description: Bad Request
           content:
@@ -52,7 +52,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ParameterHistoryCountCriteria'
+              $ref: '#/components/schemas/HistoryCountCriteria'
       responses:
         "200":
           description: OK
@@ -61,7 +61,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ParameterHistoryCount'
+                  $ref: '#/components/schemas/HistoryCount'
         "400":
           description: Bad Request
           content:
@@ -76,21 +76,21 @@ paths:
             - read
       tags:
         - histories
-      description: Find all parameters history latest
-      operationId: getAllParametersHistoryLatest
+      description: Find all latest history
+      operationId: getAllHistoryLatest
 
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ParameterHistoryCriteria'
+              $ref: '#/components/schemas/HistoryCriteria'
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ParameterHistoryPageResult'
+                $ref: '#/components/schemas/HistoryPageResult'
         "400":
           description: Bad Request
           content:
@@ -105,8 +105,8 @@ paths:
             - read
       tags:
         - histories
-      description: Find parameters history by Id
-      operationId: getParametersHistoryById
+      description: Find history by Id
+      operationId: getHistoryById
       parameters:
         - name: id
           in: path
@@ -119,7 +119,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ParameterHistory'
+                $ref: '#/components/schemas/History'
         "400":
           description: Bad Request
           content:
@@ -398,11 +398,13 @@ components:
     ParameterCreate:
       type: object
       required:
-        - key
+        - name
         - productName
         - applicationId
       properties:
-        key:
+        name:
+          type: string
+        displayName:
           type: string
         applicationId:
           type: string
@@ -412,14 +414,6 @@ components:
           type: string
         description:
           type: string
-        unit:
-          type: string
-        rangeFrom:
-          format: int32
-          type: integer
-        rangeTo:
-          format: int32
-          type: integer
     Parameter:
       type: object
       properties:
@@ -440,24 +434,24 @@ components:
           example: 2022-03-10T12:15:50-04:00
         modificationUser:
           type: string
-        name:
-          type: string
         description:
           type: string
         applicationId:
           type: string
         productName:
           type: string
-        key:
+        name:
+          type: string
+        displayName:
           type: string
         value:
           type: object
         importValue:
           type: object
-    ParameterHistory:
+    History:
       type: object
       required:
-        - key
+        - name
         - productName
         - applicationId
         - id
@@ -483,7 +477,7 @@ components:
           type: string
         productName:
           type: string
-        key:
+        name:
           type: string
         usedValue:
           type: object
@@ -493,14 +487,14 @@ components:
           type: string
         instanceId:
           type: string
-    ParameterHistoryCriteria:
+    HistoryCriteria:
       type: object
       properties:
         applicationId:
           type: string
         productName:
           type: string
-        key:
+        name:
           type: string
         pageNumber:
           type: integer
@@ -514,7 +508,7 @@ components:
           type: array
           items:
             type: string
-    ParameterHistoryPageResult:
+    HistoryPageResult:
       type: object
       properties:
         totalElements:
@@ -533,7 +527,7 @@ components:
         stream:
           type: array
           items:
-            $ref: '#/components/schemas/ParameterHistory'
+            $ref: '#/components/schemas/History'
     ParameterPageResult:
       type: object
       properties:
@@ -560,14 +554,8 @@ components:
         value: {}
         description:
           type: string
-        unit:
+        displayName:
           type: string
-        rangeFrom:
-          format: int32
-          type: integer
-        rangeTo:
-          format: int32
-          type: integer
     Product:
       type: object
       properties:
@@ -599,14 +587,14 @@ components:
           type: array
           items:
             type: string
-    ParameterHistoryCountCriteria:
+    HistoryCountCriteria:
       type: object
       properties:
         applicationId:
           type: string
         productName:
           type: string
-        key:
+        name:
           type: string
         pageNumber:
           format: int32
@@ -620,7 +608,7 @@ components:
           type: array
           items:
             type: string
-    ParameterHistoryCount:
+    HistoryCount:
       type: object
       properties:
         creationDate:
@@ -637,9 +625,9 @@ components:
           type: string
         productName:
           type: string
-        key:
-          type: string
         name:
+          type: string
+        displayName:
           type: string
         pageNumber:
           format: int32

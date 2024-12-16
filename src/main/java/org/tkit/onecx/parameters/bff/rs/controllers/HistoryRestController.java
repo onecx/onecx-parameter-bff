@@ -13,8 +13,8 @@ import org.tkit.onecx.parameters.bff.rs.mappers.ParametersMapper;
 import org.tkit.quarkus.log.cdi.LogService;
 
 import gen.org.tkit.onecx.parameters.bff.rs.internal.HistoriesApiService;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterHistoryCountCriteriaDTO;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterHistoryCriteriaDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.HistoryCountCriteriaDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.HistoryCriteriaDTO;
 import gen.org.tkit.onecx.parameters.clients.api.HistoriesApi;
 import gen.org.tkit.onecx.parameters.clients.model.ParameterHistory;
 import gen.org.tkit.onecx.parameters.clients.model.ParameterHistoryCount;
@@ -36,7 +36,7 @@ public class HistoryRestController implements HistoriesApiService {
     ExceptionMapper exceptionMapper;
 
     @Override
-    public Response getAllParametersHistory(ParameterHistoryCriteriaDTO criteriaDTO) {
+    public Response getAllHistory(HistoryCriteriaDTO criteriaDTO) {
         var criteria = mapper.map(criteriaDTO);
         try (Response response = client.getAllParametersHistory(criteria)) {
             return Response.status(response.getStatus())
@@ -45,7 +45,7 @@ public class HistoryRestController implements HistoriesApiService {
     }
 
     @Override
-    public Response getAllParametersHistoryLatest(ParameterHistoryCriteriaDTO criteriaDTO) {
+    public Response getAllHistoryLatest(HistoryCriteriaDTO criteriaDTO) {
         try (Response response = client.getAllParametersHistoryLatest(mapper.map(criteriaDTO))) {
             var result = mapper.map(response.readEntity(ParameterHistoryPageResult.class));
             return Response.status(response.getStatus()).entity(result).build();
@@ -53,7 +53,7 @@ public class HistoryRestController implements HistoriesApiService {
     }
 
     @Override
-    public Response getParametersHistoryById(String id) {
+    public Response getHistoryById(String id) {
         try (Response response = client.getParametersHistoryById(id)) {
             return Response.status(response.getStatus())
                     .entity(mapper.map(response.readEntity(ParameterHistory.class))).build();
@@ -61,7 +61,7 @@ public class HistoryRestController implements HistoriesApiService {
     }
 
     @Override
-    public Response getCountsByCriteria(ParameterHistoryCountCriteriaDTO criteriaDTO) {
+    public Response getCountsByCriteria(HistoryCountCriteriaDTO criteriaDTO) {
         var criteria = mapper.map(criteriaDTO);
         try (Response response = client.getCountsByCriteria(criteria)) {
             return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(ParameterHistoryCount[].class)))
