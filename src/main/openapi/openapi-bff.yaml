@@ -411,7 +411,13 @@ components:
         productName:
           type: string
         value:
-          type: string
+          oneOf:
+            - string
+            - number
+            - boolean
+            - integer
+            - array
+            - object
         description:
           type: string
     Parameter:
@@ -445,9 +451,21 @@ components:
         displayName:
           type: string
         value:
-          type: object
+          oneOf:
+            - string
+            - number
+            - boolean
+            - integer
+            - array
+            - object
         importValue:
-          type: object
+          oneOf:
+            - string
+            - number
+            - boolean
+            - integer
+            - array
+            - object
     History:
       type: object
       required:
@@ -480,9 +498,21 @@ components:
         name:
           type: string
         usedValue:
-          type: object
+          oneOf:
+            - string
+            - number
+            - boolean
+            - integer
+            - array
+            - object
         defaultValue:
-          type: object
+          oneOf:
+            - string
+            - number
+            - boolean
+            - integer
+            - array
+            - object
         type:
           type: string
         instanceId:
@@ -551,7 +581,14 @@ components:
     ParameterUpdate:
       type: object
       properties:
-        value: {}
+        value:
+          oneOf:
+            - string
+            - number
+            - boolean
+            - integer
+            - array
+            - object
         description:
           type: string
         displayName:
