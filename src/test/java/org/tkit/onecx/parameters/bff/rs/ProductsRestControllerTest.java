@@ -44,14 +44,14 @@ class ProductsRestControllerTest extends AbstractTest {
         svcResult.number(0).totalElements(1L).totalPages(1L).stream(List.of(productItem));
 
         // create mock rest endpoint
-        mockServerClient
+        addExpectation(mockServerClient
                 .when(request().withPath("/v1/products/load")
                         .withMethod(HttpMethod.POST)
                         .withBody(JsonBody.json(svcCriteria)))
                 .withId("mock")
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(svcResult)));
+                        .withBody(JsonBody.json(svcResult))));
 
         ProductStoreSearchCriteriaDTO storeSearchCriteriaDTO = new ProductStoreSearchCriteriaDTO();
 
@@ -72,7 +72,7 @@ class ProductsRestControllerTest extends AbstractTest {
 
         Assertions.assertEquals(output.getStream().get(0).getApplications().get(0),
                 productItem.getMicroservices().get(0).getAppId());
-        mockServerClient.clear("mock");
+
     }
 
     @Test
@@ -82,12 +82,12 @@ class ProductsRestControllerTest extends AbstractTest {
         svcCriteria.pageNumber(0).pageSize(100);
 
         // create mock rest endpoint
-        mockServerClient
+        addExpectation(mockServerClient
                 .when(request().withPath("/v1/products/load")
                         .withMethod(HttpMethod.POST)
                         .withBody(JsonBody.json(svcCriteria)))
                 .withId("mock")
-                .respond(httpRequest -> response().withStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()));
+                .respond(httpRequest -> response().withStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())));
 
         ProductStoreSearchCriteriaDTO storeSearchCriteriaDTO = new ProductStoreSearchCriteriaDTO();
 
@@ -100,7 +100,6 @@ class ProductsRestControllerTest extends AbstractTest {
                 .post()
                 .then()
                 .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
-        mockServerClient.clear("mock");
     }
 
     @Test

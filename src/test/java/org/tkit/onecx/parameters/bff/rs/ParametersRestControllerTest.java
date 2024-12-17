@@ -13,20 +13,33 @@ import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.core.Response;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.model.JsonBody;
 import org.mockserver.model.MediaType;
+import org.tkit.onecx.parameters.bff.rs.controllers.ParametersRestController;
 
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
 import gen.org.tkit.onecx.parameters.clients.model.*;
+import gen.org.tkit.onecx.product.store.clients.model.MicroserviceAbstractPSV1;
+import gen.org.tkit.onecx.product.store.clients.model.ProductItemLoadSearchCriteriaPSV1;
+import gen.org.tkit.onecx.product.store.clients.model.ProductsAbstractPSV1;
+import gen.org.tkit.onecx.product.store.clients.model.ProductsLoadResultPSV1;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
+import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
+@TestHTTPEndpoint(ParametersRestController.class)
 class ParametersRestControllerTest extends AbstractTest {
     @InjectMockServerClient
     MockServerClient mockServerClient;
+
+    @BeforeEach
+    void resetExpectation() {
+        clearExpectation(mockServerClient);
+    }
 
     @Test
     void getAllApplicationsTest() {
@@ -38,18 +51,18 @@ class ParametersRestControllerTest extends AbstractTest {
         data.add(product);
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/parameters/applications").withMethod(HttpMethod.GET))
+        addExpectation(mockServerClient.when(request().withPath("/parameters/applications").withMethod(HttpMethod.GET))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(data)));
+                        .withBody(JsonBody.json(data))));
 
         var output = given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("/parameters/applications")
+                .get("applications")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -61,7 +74,7 @@ class ParametersRestControllerTest extends AbstractTest {
     }
 
     @Test
-    void getAllKeysTest() {
+    void getAllNamesTest() {
 
         KeysPageResult data = new KeysPageResult();
         data.setNumber(1);
@@ -71,22 +84,24 @@ class ParametersRestControllerTest extends AbstractTest {
         data.setStream(List.of("key1", "key2", "key3"));
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/parameters/keys").withMethod(HttpMethod.GET))
+        addExpectation(mockServerClient.when(request().withPath("/parameters/keys")
+                .withQueryStringParameter("productName", "p1")
+                .withMethod(HttpMethod.GET))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(data)));
+                        .withBody(JsonBody.json(data))));
 
         var output = given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("/parameters/keys")
+                .get("names/p1")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(KeysPageResultDTO.class);
+                .extract().as(NamesPageResultDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getSize(), output.getSize());
@@ -103,11 +118,11 @@ class ParametersRestControllerTest extends AbstractTest {
         data.setValue(100);
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/parameters").withMethod(HttpMethod.POST)
+        addExpectation(mockServerClient.when(request().withPath("/parameters").withMethod(HttpMethod.POST)
                 .withBody(JsonBody.json(data)))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.NO_CONTENT.getStatusCode())
-                        .withContentType(MediaType.APPLICATION_JSON));
+                        .withContentType(MediaType.APPLICATION_JSON)));
 
         ParameterCreateDTO input = new ParameterCreateDTO();
         input.setApplicationId("app1");
@@ -121,7 +136,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .body(input)
-                .post("/parameters")
+                .post()
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
@@ -131,7 +146,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .post("/parameters")
+                .post()
                 .then()
                 .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
@@ -142,23 +157,20 @@ class ParametersRestControllerTest extends AbstractTest {
         String id = "test-id-1";
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.DELETE))
+        addExpectation(mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.DELETE))
                 .withPriority(100)
-                .withId("mock")
                 .respond(httpRequest -> response().withStatusCode(Response.Status.NO_CONTENT.getStatusCode())
-                        .withContentType(MediaType.APPLICATION_JSON));
+                        .withContentType(MediaType.APPLICATION_JSON)));
 
         given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .pathParam("id", id)
-                .delete("/parameters/{id}")
+                .delete(id)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        mockServerClient.clear("mock");
     }
 
     @Test
@@ -167,22 +179,19 @@ class ParametersRestControllerTest extends AbstractTest {
         String id = "test-id-1";
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.DELETE))
+        addExpectation(mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.DELETE))
                 .withPriority(100)
-                .withId("mock")
-                .respond(httpRequest -> response().withStatusCode(Response.Status.BAD_REQUEST.getStatusCode()));
+                .respond(httpRequest -> response().withStatusCode(Response.Status.BAD_REQUEST.getStatusCode())));
 
         given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .pathParam("id", id)
-                .delete("/parameters/{id}")
+                .delete(id)
                 .then()
                 .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
 
-        mockServerClient.clear("mock");
     }
 
     @Test
@@ -205,13 +214,13 @@ class ParametersRestControllerTest extends AbstractTest {
         data.setStream(List.of(p1, p2));
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/parameters/search").withMethod(HttpMethod.POST)
+        addExpectation(mockServerClient.when(request().withPath("/parameters/search").withMethod(HttpMethod.POST)
                 .withContentType(MediaType.APPLICATION_JSON)
                 .withBody(JsonBody.json(new ParameterSearchCriteria().applicationId("app1").pageNumber(0).pageSize(5))))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(data)));
+                        .withBody(JsonBody.json(data))));
 
         var output = given()
                 .when()
@@ -219,7 +228,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .body(new ParameterSearchCriteriaDTO().applicationId("app1").pageNumber(0).pageSize(5))
-                .post("/parameters/search")
+                .post("search")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -240,19 +249,18 @@ class ParametersRestControllerTest extends AbstractTest {
         data.setName("key1");
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/parameters/" + data.getId()).withMethod(HttpMethod.GET))
+        addExpectation(mockServerClient.when(request().withPath("/parameters/" + data.getId()).withMethod(HttpMethod.GET))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(data)));
+                        .withBody(JsonBody.json(data))));
 
         var output = given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .pathParam("id", data.getId())
-                .get("/parameters/{id}")
+                .get(data.getId())
                 .then().log().all()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -273,11 +281,11 @@ class ParametersRestControllerTest extends AbstractTest {
         data.setValue(100);
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.PUT)
+        addExpectation(mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.PUT)
                 .withBody(JsonBody.json(data)))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.NO_CONTENT.getStatusCode())
-                        .withContentType(MediaType.APPLICATION_JSON));
+                        .withContentType(MediaType.APPLICATION_JSON)));
 
         ParameterUpdateDTO input = new ParameterUpdateDTO();
         input.description("description");
@@ -289,11 +297,78 @@ class ParametersRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .pathParam("id", id)
                 .body(input)
-                .put("/parameters/{id}")
+                .put(id)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 
+    @Test
+    void getProductsTest() {
+
+        ProductItemLoadSearchCriteriaPSV1 svcCriteria = new ProductItemLoadSearchCriteriaPSV1().pageNumber(0).pageSize(1000);
+
+        ProductsLoadResultPSV1 svcResult = new ProductsLoadResultPSV1()
+                .number(0)
+                .totalElements(1L)
+                .totalPages(1L)
+                .addStreamItem(
+                        new ProductsAbstractPSV1()
+                                .basePath("test1")
+                                .name("test1")
+                                .displayName("test1")
+                                .addMicroservicesItem(new MicroserviceAbstractPSV1().appName("app1").appId("app1")))
+                .addStreamItem(
+                        new ProductsAbstractPSV1()
+                                .basePath("test2")
+                                .name("test2")
+                                .displayName("CustomDisplayName")
+                                .addMicroservicesItem(new MicroserviceAbstractPSV1().appName("app1").appId("app1")))
+                .addStreamItem(
+                        new ProductsAbstractPSV1()
+                                .basePath("test3")
+                                .name("test3")
+                                .displayName("test3")
+                                .addMicroservicesItem(new MicroserviceAbstractPSV1().appName("app1").appId("app1")));
+
+        // create mock rest endpoint
+        addExpectation(mockServerClient
+                .when(request().withPath("/v1/products/load")
+                        .withMethod(HttpMethod.POST)
+                        .withBody(JsonBody.json(svcCriteria)))
+                .withPriority(2000)
+                .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
+                        .withContentType(MediaType.APPLICATION_JSON)
+                        .withBody(JsonBody.json(svcResult))));
+
+        List<Product> data = new ArrayList<>();
+        Product product = new Product();
+        product.setProductName("test2");
+        product.setApplications(List.of("app1"));
+        data.add(product);
+
+        // create mock rest endpoint
+        addExpectation(mockServerClient.when(request().withPath("/parameters/applications").withMethod(HttpMethod.GET))
+                .withPriority(100)
+                .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
+                        .withContentType(MediaType.APPLICATION_JSON)
+                        .withBody(JsonBody.json(data))));
+
+        var wrapper = given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
+                .contentType(APPLICATION_JSON)
+                .get("products")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().as(ProductWrapperDTO.class);
+
+        Assertions.assertNotNull(wrapper);
+        Assertions.assertNotNull(wrapper.getProducts());
+        Assertions.assertEquals(3, wrapper.getProducts().size());
+        Assertions.assertNotNull(wrapper.getUsedProducts());
+        Assertions.assertEquals(1, wrapper.getUsedProducts().size());
+        Assertions.assertEquals("CustomDisplayName", wrapper.getUsedProducts().get(0).getDisplayName());
+    }
 }
