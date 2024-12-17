@@ -76,7 +76,7 @@ class ParametersRestControllerTest extends AbstractTest {
     @Test
     void getAllNamesTest() {
 
-        KeysPageResult data = new KeysPageResult();
+        NamesPageResult data = new NamesPageResult();
         data.setNumber(1);
         data.setSize(3);
         data.setTotalElements(3L);
@@ -84,8 +84,7 @@ class ParametersRestControllerTest extends AbstractTest {
         data.setStream(List.of("key1", "key2", "key3"));
 
         // create mock rest endpoint
-        addExpectation(mockServerClient.when(request().withPath("/parameters/keys")
-                .withQueryStringParameter("productName", "p1")
+        addExpectation(mockServerClient.when(request().withPath("/parameters/names/p1")
                 .withMethod(HttpMethod.GET))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())

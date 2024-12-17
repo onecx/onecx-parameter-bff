@@ -78,7 +78,7 @@ public interface ParametersMapper {
     ProductDTO map(Product product);
 
     @Mapping(target = "removeStreamItem", ignore = true)
-    NamesPageResultDTO map(KeysPageResult keysPageResult);
+    NamesPageResultDTO map(NamesPageResult keysPageResult);
 
     ParameterDTO map(Parameter applicationParameter);
 
