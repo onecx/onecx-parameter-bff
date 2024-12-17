@@ -18,9 +18,9 @@ import org.mockserver.model.JsonBody;
 import org.mockserver.model.MediaType;
 
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
-import gen.org.tkit.onecx.parameters.clients.model.ParameterHistory;
-import gen.org.tkit.onecx.parameters.clients.model.ParameterHistoryCount;
-import gen.org.tkit.onecx.parameters.clients.model.ParameterHistoryPageResult;
+import gen.org.tkit.onecx.parameters.clients.model.History;
+import gen.org.tkit.onecx.parameters.clients.model.HistoryCount;
+import gen.org.tkit.onecx.parameters.clients.model.HistoryPageResult;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -33,17 +33,17 @@ class HistoryRestControllerTest extends AbstractTest {
     @Test
     void getAllApplicationParametersHistoryTest() {
 
-        ParameterHistory h1 = new ParameterHistory();
+        History h1 = new History();
         h1.setId("1");
-        h1.setKey("key2");
+        h1.setName("key2");
         h1.setUsedValue("value1");
 
-        ParameterHistory h2 = new ParameterHistory();
+        History h2 = new History();
         h2.setId("2");
-        h2.setKey("key2");
+        h2.setName("key2");
         h2.setUsedValue("value2");
 
-        ParameterHistoryPageResult data = new ParameterHistoryPageResult();
+        HistoryPageResult data = new HistoryPageResult();
         data.setNumber(1);
         data.setSize(2);
         data.setTotalElements(2L);
@@ -66,7 +66,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ParameterHistoryPageResultDTO.class);
+                .extract().as(HistoryPageResultDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getSize(), output.getSize());
@@ -77,17 +77,17 @@ class HistoryRestControllerTest extends AbstractTest {
     @Test
     void getAllApplicationParametersHistoryLatestTest() {
 
-        ParameterHistory h1 = new ParameterHistory();
+        History h1 = new History();
         h1.setId("1");
-        h1.setKey("key2");
+        h1.setName("key2");
         h1.setUsedValue("value1");
 
-        ParameterHistory h2 = new ParameterHistory();
+        History h2 = new History();
         h2.setId("2");
-        h2.setKey("key2");
+        h2.setName("key2");
         h2.setUsedValue("value2");
 
-        ParameterHistoryPageResult data = new ParameterHistoryPageResult();
+        HistoryPageResult data = new HistoryPageResult();
         data.setNumber(1);
         data.setSize(2);
         data.setTotalElements(2L);
@@ -106,12 +106,12 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .body(new ParameterHistoryCriteriaDTO())
+                .body(new HistoryCriteriaDTO())
                 .post("/histories/latest")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ParameterHistoryPageResultDTO.class);
+                .extract().as(HistoryPageResultDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getSize(), output.getSize());
@@ -121,11 +121,11 @@ class HistoryRestControllerTest extends AbstractTest {
     @Test
     void getApplicationParametersHistoryByIdTest() {
 
-        ParameterHistory data = new ParameterHistory();
+        History data = new History();
         data.setId("test-id-1");
         data.setApplicationId("app1");
         data.setUsedValue("value1");
-        data.setKey("key1");
+        data.setName("key1");
 
         // create mock rest endpoint
         mockServerClient.when(request().withPath("/histories/" + data.getId()).withMethod(HttpMethod.GET))
@@ -144,7 +144,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ParameterHistoryDTO.class);
+                .extract().as(HistoryDTO.class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.getId(), output.getId());
@@ -154,11 +154,11 @@ class HistoryRestControllerTest extends AbstractTest {
 
     @Test
     void getCountsByCriteriaTest() {
-        ParameterHistoryCount c1 = new ParameterHistoryCount();
+        HistoryCount c1 = new HistoryCount();
         c1.setCount(1L);
         c1.setCreationDate(OffsetDateTime.now());
 
-        ParameterHistoryCount c2 = new ParameterHistoryCount();
+        HistoryCount c2 = new HistoryCount();
         c1.setCount(2L);
         c1.setCreationDate(OffsetDateTime.now());
         var data = List.of(c1, c2);
@@ -176,12 +176,12 @@ class HistoryRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .body(new ParameterHistoryCountCriteriaDTO())
+                .body(new HistoryCountCriteriaDTO())
                 .post("/histories/counts")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ParameterHistoryCountDTO[].class);
+                .extract().as(HistoryCountDTO[].class);
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.size(), output.length);

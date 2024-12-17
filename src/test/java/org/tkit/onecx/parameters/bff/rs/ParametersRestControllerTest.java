@@ -7,6 +7,7 @@ import static org.mockserver.model.HttpResponse.response;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.core.Response;
@@ -98,8 +99,8 @@ class ParametersRestControllerTest extends AbstractTest {
         ParameterCreate data = new ParameterCreate();
         data.setApplicationId("app1");
         data.setProductName("product1");
-        data.setKey("key1");
-        data.setValue("value1");
+        data.setName("key1");
+        data.setValue(100);
 
         // create mock rest endpoint
         mockServerClient.when(request().withPath("/parameters").withMethod(HttpMethod.POST)
@@ -110,9 +111,9 @@ class ParametersRestControllerTest extends AbstractTest {
 
         ParameterCreateDTO input = new ParameterCreateDTO();
         input.setApplicationId("app1");
-        input.setValue("value1");
+        input.setValue(100);
         input.setProductName("product1");
-        input.setKey("key1");
+        input.setName("key1");
 
         given()
                 .when()
@@ -124,7 +125,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        //create with no body should return BAD_REQUEST
+        //create with nobody should return BAD_REQUEST
         given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
@@ -188,12 +189,12 @@ class ParametersRestControllerTest extends AbstractTest {
     void searchApplicationParametersTest() {
         Parameter p1 = new Parameter();
         p1.setId("1");
-        p1.setKey("key2");
+        p1.setName("key2");
         p1.setValue("value1");
 
         Parameter p2 = new Parameter();
         p2.setId("2");
-        p2.setKey("key2");
+        p2.setName("key2");
         p2.setValue("value2");
 
         ParameterPageResult data = new ParameterPageResult();
@@ -235,8 +236,8 @@ class ParametersRestControllerTest extends AbstractTest {
         Parameter data = new Parameter();
         data.setId("test-id-1");
         data.setApplicationId("app1");
-        data.setValue("value1");
-        data.setKey("key1");
+        data.setValue(Map.of("key1", "value1", "key2", Map.of("s1", "v1")));
+        data.setName("key1");
 
         // create mock rest endpoint
         mockServerClient.when(request().withPath("/parameters/" + data.getId()).withMethod(HttpMethod.GET))
@@ -252,7 +253,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .contentType(APPLICATION_JSON)
                 .pathParam("id", data.getId())
                 .get("/parameters/{id}")
-                .then()
+                .then().log().all()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
                 .extract().as(ParameterDTO.class);
@@ -269,7 +270,7 @@ class ParametersRestControllerTest extends AbstractTest {
 
         ParameterUpdate data = new ParameterUpdate();
         data.description("description");
-        data.setValue("value1");
+        data.setValue(100);
 
         // create mock rest endpoint
         mockServerClient.when(request().withPath("/parameters/" + id).withMethod(HttpMethod.PUT)
@@ -280,7 +281,8 @@ class ParametersRestControllerTest extends AbstractTest {
 
         ParameterUpdateDTO input = new ParameterUpdateDTO();
         input.description("description");
-        input.setValue("value1");
+
+        input.setValue(data.getValue());
 
         given()
                 .when()
@@ -293,4 +295,5 @@ class ParametersRestControllerTest extends AbstractTest {
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
+
 }

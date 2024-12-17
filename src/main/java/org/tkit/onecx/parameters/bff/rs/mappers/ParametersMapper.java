@@ -17,11 +17,11 @@ public interface ParametersMapper {
     ParameterUpdate mapUpdate(ParameterUpdateDTO dto);
 
     @Mapping(target = "removeStreamItem", ignore = true)
-    ParameterHistoryPageResultDTO map(ParameterHistoryPageResult applicationParameterHistoryPageResult);
+    HistoryPageResultDTO map(HistoryPageResult applicationParameterHistoryPageResult);
 
-    ParameterHistoryDTO map(ParameterHistory applicationParameterHistory);
+    HistoryDTO map(History applicationParameterHistory);
 
-    ParameterHistoryCountDTO[] map(ParameterHistoryCount[] parameterHistoryCount);
+    HistoryCountDTO[] map(HistoryCount[] parameterHistoryCount);
 
     @Mapping(target = "removeStreamItem", ignore = true)
     ParameterPageResultDTO map(ParameterPageResult applicationParameterPageResult);
@@ -29,19 +29,17 @@ public interface ParametersMapper {
     @Mapping(target = "removeStreamItem", ignore = true)
     List<ProductDTO> map(Product[] products);
 
-    @Mapping(target = "displayName", ignore = true)
     @Mapping(target = "removeApplicationsItem", ignore = true)
     ProductDTO map(Product product);
 
     @Mapping(target = "removeStreamItem", ignore = true)
     KeysPageResultDTO map(KeysPageResult keysPageResult);
 
-    @Mapping(target = "value", source = "value")
     ParameterDTO map(Parameter applicationParameter);
 
-    ParameterHistoryCriteria map(ParameterHistoryCriteriaDTO criteriaDTO);
+    HistoryCriteria map(HistoryCriteriaDTO criteriaDTO);
 
-    ParameterHistoryCountCriteria map(ParameterHistoryCountCriteriaDTO criteriaDTO);
+    HistoryCountCriteria map(HistoryCountCriteriaDTO criteriaDTO);
 
     ParameterSearchCriteria mapCriteria(ParameterSearchCriteriaDTO criteriaDTO);
 }
