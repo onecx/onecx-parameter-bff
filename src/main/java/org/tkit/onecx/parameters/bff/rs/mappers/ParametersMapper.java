@@ -44,7 +44,7 @@ public interface ParametersMapper {
     default ProductWrapperDTO maps(ProductWrapperDTO wrapper, ProductsLoadResultPSV1 data) {
         if (data != null && !data.getStream().isEmpty()) {
             var map = wrapper.getUsedProducts().stream().collect(toMap(ProductDTO::getProductName, p -> p));
-            List<ProductDTO> list = new ArrayList<ProductDTO>(data.getStream().size());
+            List<ProductDTO> list = new ArrayList<>(data.getStream().size());
             for (ProductsAbstractPSV1 product : data.getStream()) {
                 var item = map(product);
                 var p = map.get(item.getProductName());
