@@ -84,8 +84,8 @@ public class ParametersRestController implements ParametersApiService {
 
     @Override
     public Response getAllNames(String productName, String applicationId) {
-        try (Response response = client.getAllKeys(applicationId, productName)) {
-            return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(KeysPageResult.class))).build();
+        try (Response response = client.getAllNames(productName, applicationId)) {
+            return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(NamesPageResult.class))).build();
         }
     }
 
