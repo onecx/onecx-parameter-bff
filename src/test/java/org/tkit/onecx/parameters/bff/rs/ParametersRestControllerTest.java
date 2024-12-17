@@ -99,7 +99,7 @@ class ParametersRestControllerTest extends AbstractTest {
         ParameterCreate data = new ParameterCreate();
         data.setApplicationId("app1");
         data.setProductName("product1");
-        data.setKey("key1");
+        data.setName("key1");
         data.setValue(100);
 
         // create mock rest endpoint
@@ -189,12 +189,12 @@ class ParametersRestControllerTest extends AbstractTest {
     void searchApplicationParametersTest() {
         Parameter p1 = new Parameter();
         p1.setId("1");
-        p1.setKey("key2");
+        p1.setName("key2");
         p1.setValue("value1");
 
         Parameter p2 = new Parameter();
         p2.setId("2");
-        p2.setKey("key2");
+        p2.setName("key2");
         p2.setValue("value2");
 
         ParameterPageResult data = new ParameterPageResult();
@@ -237,7 +237,7 @@ class ParametersRestControllerTest extends AbstractTest {
         data.setId("test-id-1");
         data.setApplicationId("app1");
         data.setValue(Map.of("key1", "value1", "key2", Map.of("s1", "v1")));
-        data.setKey("key1");
+        data.setName("key1");
 
         // create mock rest endpoint
         mockServerClient.when(request().withPath("/parameters/" + data.getId()).withMethod(HttpMethod.GET))
