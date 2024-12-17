@@ -16,15 +16,18 @@ import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.model.JsonBody;
 import org.mockserver.model.MediaType;
+import org.tkit.onecx.parameters.bff.rs.controllers.HistoryRestController;
 
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
 import gen.org.tkit.onecx.parameters.clients.model.History;
 import gen.org.tkit.onecx.parameters.clients.model.HistoryCount;
 import gen.org.tkit.onecx.parameters.clients.model.HistoryPageResult;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
+import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
+@TestHTTPEndpoint(HistoryRestController.class)
 class HistoryRestControllerTest extends AbstractTest {
 
     @InjectMockServerClient
@@ -51,18 +54,18 @@ class HistoryRestControllerTest extends AbstractTest {
         data.setStream(List.of(h1, h2));
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories").withMethod(HttpMethod.POST))
+        addExpectation(mockServerClient.when(request().withPath("/histories").withMethod(HttpMethod.POST))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(data)));
+                        .withBody(JsonBody.json(data))));
 
         var output = given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .post("/histories")
+                .post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -95,11 +98,11 @@ class HistoryRestControllerTest extends AbstractTest {
         data.setStream(List.of(h1, h2));
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories/latest").withMethod(HttpMethod.POST))
+        addExpectation(mockServerClient.when(request().withPath("/histories/latest").withMethod(HttpMethod.POST))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(data)));
+                        .withBody(JsonBody.json(data))));
 
         var output = given()
                 .when()
@@ -107,7 +110,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .body(new HistoryCriteriaDTO())
-                .post("/histories/latest")
+                .post("latest")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -128,19 +131,18 @@ class HistoryRestControllerTest extends AbstractTest {
         data.setName("key1");
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories/" + data.getId()).withMethod(HttpMethod.GET))
+        addExpectation(mockServerClient.when(request().withPath("/histories/" + data.getId()).withMethod(HttpMethod.GET))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(data)));
+                        .withBody(JsonBody.json(data))));
 
         var output = given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .pathParam("id", data.getId())
-                .get("/histories/{id}")
+                .get(data.getId())
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -164,12 +166,12 @@ class HistoryRestControllerTest extends AbstractTest {
         var data = List.of(c1, c2);
 
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories/counts").withMethod(HttpMethod.POST))
+        addExpectation(mockServerClient.when(request().withPath("/histories/counts").withMethod(HttpMethod.POST))
                 .withPriority(100)
                 .withId("mock")
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(data)));
+                        .withBody(JsonBody.json(data))));
 
         var output = given()
                 .when()
@@ -177,7 +179,7 @@ class HistoryRestControllerTest extends AbstractTest {
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
                 .body(new HistoryCountCriteriaDTO())
-                .post("/histories/counts")
+                .post("counts")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -185,25 +187,23 @@ class HistoryRestControllerTest extends AbstractTest {
 
         Assertions.assertNotNull(output);
         Assertions.assertEquals(data.size(), output.length);
-        mockServerClient.clear("mock");
     }
 
     @Test
     void getCountsByCriteria_Server_error_Test() {
         // create mock rest endpoint
-        mockServerClient.when(request().withPath("/histories/counts").withMethod(HttpMethod.GET))
+        addExpectation(mockServerClient.when(request().withPath("/histories/counts").withMethod(HttpMethod.GET))
                 .withPriority(100)
                 .withId("mock")
-                .respond(httpRequest -> response().withStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()));
+                .respond(httpRequest -> response().withStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())));
 
         given()
                 .when()
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("/histories/counts")
+                .get("/counts")
                 .then()
                 .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
-        mockServerClient.clear("mock");
     }
 }

@@ -1,6 +1,11 @@
 package org.tkit.onecx.parameters.bff.rs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.microprofile.config.ConfigProvider;
+import org.mockserver.client.MockServerClient;
+import org.mockserver.mock.Expectation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -16,9 +21,9 @@ import io.restassured.config.RestAssuredConfig;
 @QuarkusTestResource(MockServerTestResource.class)
 public abstract class AbstractTest {
 
-    protected static final String ADMIN = "alice";
+    private static final List<String> MOCK_IDS = new ArrayList<>();
 
-    protected static final String USER = "bob";
+    protected static final String ADMIN = "alice";
 
     KeycloakTestClient keycloakClient = new KeycloakTestClient();
 
@@ -33,5 +38,23 @@ public abstract class AbstractTest {
                             objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
                             return objectMapper;
                         }));
+    }
+
+    protected void addExpectation(Expectation[] exceptions) {
+        for (Expectation e : List.of(exceptions)) {
+            MOCK_IDS.add(e.getId());
+        }
+
+    }
+
+    protected void clearExpectation(MockServerClient client) {
+        MOCK_IDS.forEach(x -> {
+            try {
+                client.clear(x);
+            } catch (Exception ex) {
+                //  mockId not existing
+            }
+        });
+        MOCK_IDS.clear();
     }
 }

@@ -6,10 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import org.tkit.quarkus.log.cdi.LogParam;
 
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.HistoryCountCriteriaDTO;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.HistoryCriteriaDTO;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterCreateDTO;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterUpdateDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
 
 @ApplicationScoped
 public class ParametersLog implements LogParam {
@@ -27,6 +24,11 @@ public class ParametersLog implements LogParam {
                 this.item(10, HistoryCountCriteriaDTO.class,
                         x -> HistoryCountCriteriaDTO.class.getSimpleName() + "[appId:"
                                 + ((HistoryCountCriteriaDTO) x).getApplicationId()
+                                + "]"),
+                this.item(10, ProductStoreSearchCriteriaDTO.class,
+                        x -> ProductStoreSearchCriteriaDTO.class.getSimpleName() + "[page:"
+                                + ((ProductStoreSearchCriteriaDTO) x).getPageNumber() + "size:"
+                                + ((ProductStoreSearchCriteriaDTO) x).getPageSize()
                                 + "]"),
                 this.item(10,
                         HistoryCriteriaDTO.class,
