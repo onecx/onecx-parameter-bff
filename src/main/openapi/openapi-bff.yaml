@@ -411,13 +411,7 @@ components:
         productName:
           type: string
         value:
-          oneOf:
-            - string
-            - number
-            - boolean
-            - integer
-            - array
-            - object
+          $ref: '#/components/schemas/ParameterValue'
         description:
           type: string
     Parameter:
@@ -451,21 +445,16 @@ components:
         displayName:
           type: string
         value:
-          oneOf:
-            - string
-            - number
-            - boolean
-            - integer
-            - array
-            - object
+          $ref: '#/components/schemas/ParameterValue'
         importValue:
-          oneOf:
-            - string
-            - number
-            - boolean
-            - integer
-            - array
-            - object
+          $ref: '#/components/schemas/ParameterValue'
+    ParameterValue:
+      oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+        - type: integer
+        - type: object
     History:
       type: object
       required:
@@ -498,21 +487,9 @@ components:
         name:
           type: string
         usedValue:
-          oneOf:
-            - string
-            - number
-            - boolean
-            - integer
-            - array
-            - object
+          $ref: '#/components/schemas/ParameterValue'
         defaultValue:
-          oneOf:
-            - string
-            - number
-            - boolean
-            - integer
-            - array
-            - object
+          $ref: '#/components/schemas/ParameterValue'
         type:
           type: string
         instanceId:
@@ -582,13 +559,7 @@ components:
       type: object
       properties:
         value:
-          oneOf:
-            - string
-            - number
-            - boolean
-            - integer
-            - array
-            - object
+          $ref: '#/components/schemas/ParameterValue'
         description:
           type: string
         displayName:
