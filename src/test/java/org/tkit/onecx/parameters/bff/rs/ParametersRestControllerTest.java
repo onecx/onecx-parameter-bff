@@ -151,6 +151,42 @@ class ParametersRestControllerTest extends AbstractTest {
     }
 
     @Test
+    void createParameterBadRequestTest() {
+        var problem = new ProblemDetailResponse()
+                .errorCode("PERSIST_ENTITY_FAILED")
+                .detail("could not execute statement [ERROR: duplicate key value violates unique constraint")
+                .addParamsItem(new ProblemDetailParam().key("constraint")
+                        .value("could not execute statement [ERROR: duplicate key value violates unique constraint"));
+
+        var data = new ParameterCreate().applicationId("app1").productName("product1").name("key1").value(100);
+
+        // create mock rest endpoint
+        addExpectation(mockServerClient.when(request().withPath("/parameters").withMethod(HttpMethod.POST)
+                .withBody(JsonBody.json(data)))
+                .withPriority(100)
+                .respond(httpRequest -> response().withStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+                        .withContentType(MediaType.APPLICATION_JSON)
+                        .withBody(JsonBody.json(problem))));
+
+        ParameterCreateDTO input = new ParameterCreateDTO().applicationId("app1")
+                .value(100).productName("product1").name("key1");
+
+        var response = given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
+                .contentType(APPLICATION_JSON)
+                .body(input)
+                .post()
+                .then()
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
+                .extract().as(ProblemDetailResponseDTO.class);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(problem.getErrorCode(), response.getErrorCode());
+    }
+
+    @Test
     void deleteParameterTest() {
 
         String id = "test-id-1";
