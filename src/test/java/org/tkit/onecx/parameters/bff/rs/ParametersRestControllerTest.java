@@ -178,7 +178,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .contentType(APPLICATION_JSON)
                 .body(input)
                 .post()
-                .then().log().all()
+                .then()
                 .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
                 .extract().as(ProblemDetailResponseDTO.class);
 
