@@ -5,9 +5,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.core.Response;
@@ -405,5 +403,96 @@ class ParametersRestControllerTest extends AbstractTest {
         Assertions.assertNotNull(wrapper.getUsedProducts());
         Assertions.assertEquals(1, wrapper.getUsedProducts().size());
         Assertions.assertEquals("CustomDisplayName", wrapper.getUsedProducts().get(0).getDisplayName());
+    }
+
+    @Test
+    void exportParameterTest() {
+
+        ExportParameterRequest request = new ExportParameterRequest();
+        request.setProductNames(Set.of("test-product"));
+
+        ParameterSnapshot parameterSnapshot = new ParameterSnapshot();
+        Map<String, List<EximParameter>> parameterMap = new HashMap<>();
+        parameterMap.put("test-product",
+                List.of(new EximParameter().name("test1").applicationId("test").productName("test-product")));
+        parameterSnapshot.setId("1");
+        parameterSnapshot.setProducts(parameterMap);
+
+        // create mock rest endpoint
+        addExpectation(mockServerClient.when(request().withPath("/parameters/export").withMethod(HttpMethod.POST)
+                .withBody(JsonBody.json(request)))
+                .withPriority(100)
+                .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
+                        .withContentType(MediaType.APPLICATION_JSON)
+                        .withBody(JsonBody.json(parameterSnapshot))));
+
+        ExportParameterRequestDTO requestDTO = new ExportParameterRequestDTO();
+        requestDTO.setProductNames(Set.of("test-product"));
+
+        ParameterSnapshotDTO parameterSnapshotDTO = new ParameterSnapshotDTO();
+        Map<String, List<EximParameterDTO>> parameterMapDto = new HashMap<>();
+        parameterMapDto.put("test-product",
+                List.of(new EximParameterDTO().name("test1").applicationId("test").productName("test-product")));
+        parameterSnapshotDTO.setId("1");
+        parameterSnapshotDTO.setProducts(parameterMapDto);
+
+        var output = given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
+                .contentType(APPLICATION_JSON)
+                .body(requestDTO)
+                .post("export")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().as(ParameterSnapshotDTO.class);
+        Assertions.assertEquals(output.getProducts().get("test-product").get(0).getApplicationId(),
+                parameterSnapshot.getProducts().get("test-product").get(0).getApplicationId());
+    }
+
+    @Test
+    void importParameterTest() {
+
+        ParameterSnapshot request = new ParameterSnapshot();
+        Map<String, List<EximParameter>> parameterMap = new HashMap<>();
+        parameterMap.put("test-product",
+                List.of(new EximParameter().name("test1").applicationId("test").productName("test-product")));
+        request.setId("10000000000");
+        request.setProducts(parameterMap);
+
+        ImportParameterResponse response = new ImportParameterResponse();
+        response.setId("10000000000");
+        Map<String, ImportParameterResponseStatus> statusMap = new HashMap<>();
+        statusMap.put("test1", ImportParameterResponseStatus.CREATED);
+        response.setParameters(statusMap);
+
+        // create mock rest endpoint
+        addExpectation(mockServerClient.when(request().withPath("/parameters/import").withMethod(HttpMethod.POST)
+                .withBody(JsonBody.json(request)))
+                .withPriority(100)
+                .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
+                        .withContentType(MediaType.APPLICATION_JSON)
+                        .withBody(JsonBody.json(response))));
+
+        ParameterSnapshotDTO requestDTO = new ParameterSnapshotDTO();
+        requestDTO.setId("10000000000");
+        Map<String, List<EximParameterDTO>> parameterDTOMap = new HashMap<>();
+        parameterDTOMap.put("test-product",
+                List.of(new EximParameterDTO().name("test1").applicationId("test").productName("test-product")));
+        requestDTO.setProducts(parameterDTOMap);
+
+        var output = given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
+                .contentType(APPLICATION_JSON)
+                .body(requestDTO)
+                .post("import")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().as(ImportParameterResponseDTO.class);
+
+        Assertions.assertEquals(output.getParameters().get("test1").toString(),
+                response.getParameters().get("test1").toString());
     }
 }

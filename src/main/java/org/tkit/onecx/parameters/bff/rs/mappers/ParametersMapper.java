@@ -4,6 +4,8 @@ import static java.util.stream.Collectors.toMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -87,4 +89,37 @@ public interface ParametersMapper {
     HistoryCountCriteria map(HistoryCountCriteriaDTO criteriaDTO);
 
     ParameterSearchCriteria mapCriteria(ParameterSearchCriteriaDTO criteriaDTO);
+
+    ExportParameterRequest mapExport(ExportParameterRequestDTO exportParameterRequestDTO);
+
+    ParameterSnapshot mapImport(ParameterSnapshotDTO parameterSnapshotDTO);
+
+    @Mapping(target = "products", source = "products")
+    Map<String, List<EximParameter>> map(Map<String, List<EximParameterDTO>> map);
+
+    default List<EximParameter> mapEximParameterList(List<EximParameterDTO> dtoList) {
+        return dtoList.stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
+
+    @Mapping(target = "products", source = "products")
+    Map<String, List<EximParameterDTO>> mapToDTOMap(Map<String, List<EximParameter>> map);
+
+    default List<EximParameterDTO> mapEximParameterDTOList(List<EximParameter> dtoList) {
+        return dtoList.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    EximParameter map(EximParameterDTO eximParameter);
+
+    EximParameterDTO mapToDTO(EximParameter eximParameter);
+
+    @Mapping(target = "removeProductsItem", ignore = true)
+    ParameterSnapshotDTO mapSnapshot(ParameterSnapshot snapshot);
+
+    @Mapping(target = "removeParametersItem", ignore = true)
+    ImportParameterResponseDTO mapImportResult(ImportParameterResponse importResult);
+
 }
