@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -99,8 +98,7 @@ public interface ParametersMapper {
 
     default List<EximParameter> mapEximParameterList(List<EximParameterDTO> dtoList) {
         return dtoList.stream()
-                .map(this::map)
-                .collect(Collectors.toList());
+                .map(this::map).toList();
     }
 
     @Mapping(target = "products", source = "products")
@@ -108,8 +106,7 @@ public interface ParametersMapper {
 
     default List<EximParameterDTO> mapEximParameterDTOList(List<EximParameter> dtoList) {
         return dtoList.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+                .map(this::mapToDTO).toList();
     }
 
     EximParameter map(EximParameterDTO eximParameter);
