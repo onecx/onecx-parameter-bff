@@ -17,10 +17,7 @@ import org.tkit.onecx.parameters.bff.rs.models.ParameterConfig;
 import org.tkit.quarkus.log.cdi.LogService;
 
 import gen.org.tkit.onecx.parameters.bff.rs.internal.ParametersApiService;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterCreateDTO;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterSearchCriteriaDTO;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ParameterUpdateDTO;
-import gen.org.tkit.onecx.parameters.bff.rs.internal.model.ProblemDetailResponseDTO;
+import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
 import gen.org.tkit.onecx.parameters.clients.api.ParametersApi;
 import gen.org.tkit.onecx.parameters.clients.model.*;
 import gen.org.tkit.onecx.product.store.clients.api.ProductsApi;
@@ -113,6 +110,22 @@ public class ParametersRestController implements ParametersApiService {
             }
 
             return Response.status(response.getStatus()).entity(wrapper).build();
+        }
+    }
+
+    @Override
+    public Response exportParameters(ExportParameterRequestDTO exportParameterRequestDTO) {
+        try (Response response = client.exportParameters(mapper.mapExport(exportParameterRequestDTO))) {
+            var snapshot = response.readEntity(ParameterSnapshot.class);
+            return Response.status(response.getStatus()).entity(mapper.mapSnapshot(snapshot)).build();
+        }
+    }
+
+    @Override
+    public Response importParameters(ParameterSnapshotDTO parameterSnapshotDTO) {
+        try (Response response = client.importParameters(mapper.mapImport(parameterSnapshotDTO))) {
+            var importResult = response.readEntity(ImportParameterResponse.class);
+            return Response.status(response.getStatus()).entity(mapper.mapImportResult(importResult)).build();
         }
     }
 
