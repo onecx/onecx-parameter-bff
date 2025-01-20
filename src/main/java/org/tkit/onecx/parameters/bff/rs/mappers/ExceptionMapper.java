@@ -36,7 +36,7 @@ public interface ExceptionMapper {
             return Response.status(Response.Status.BAD_REQUEST).build();
         } else {
             if (ex.getResponse().getMediaType() != null
-                    && ex.getResponse().getMediaType().toString().equals(APPLICATION_JSON)) {
+                    && ex.getResponse().getMediaType().toString().contains(APPLICATION_JSON)) {
                 return Response.status(ex.getResponse().getStatus())
                         .entity(map(ex.getResponse().readEntity(ProblemDetailResponse.class))).build();
             } else {
