@@ -25,11 +25,6 @@ public class ParametersLog implements LogParam {
                         x -> HistoryCountCriteriaDTO.class.getSimpleName() + "[appId:"
                                 + ((HistoryCountCriteriaDTO) x).getApplicationId()
                                 + "]"),
-                this.item(10, ProductStoreSearchCriteriaDTO.class,
-                        x -> ProductStoreSearchCriteriaDTO.class.getSimpleName() + "[page:"
-                                + ((ProductStoreSearchCriteriaDTO) x).getPageNumber() + "size:"
-                                + ((ProductStoreSearchCriteriaDTO) x).getPageSize()
-                                + "]"),
                 this.item(10,
                         HistoryCriteriaDTO.class,
                         x -> HistoryCriteriaDTO.class.getSimpleName() + "[appId:"

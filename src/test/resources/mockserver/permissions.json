@@ -14,7 +14,6 @@
           "appId": "onecx-parameter-bff",
           "permissions": {
             "parameter": ["read", "write", "delete"],
-            "product": ["read", "write", "delete"],
             "permission": ["admin-write","admin-read"]
           }
         },
@@ -37,7 +36,6 @@
           "appId": "onecx-parameter-bff",
           "permissions": {
             "parameter": ["read"],
-            "product": ["read"],
             "permission": ["admin-write","admin-read"]
           }
         },

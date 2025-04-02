@@ -4,7 +4,8 @@ include::onecx-parameter-bff-attributes.adoc[opts=optional]
 
 include::docs.adoc[opts=optional]
 
-=== Configuration
-include::onecx-parameter-bff.adoc[opts=optional]
+
+include::onecx-parameter-bff-docs.adoc[opts=optional]
+s=optional]
 
 include::onecx-parameter-bff-docs.adoc[opts=optional]

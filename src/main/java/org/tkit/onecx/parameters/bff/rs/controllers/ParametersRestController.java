@@ -12,17 +12,12 @@ import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 import org.tkit.onecx.parameters.bff.rs.mappers.ExceptionMapper;
 import org.tkit.onecx.parameters.bff.rs.mappers.ParametersMapper;
-import org.tkit.onecx.parameters.bff.rs.mappers.ProductsMapper;
-import org.tkit.onecx.parameters.bff.rs.models.ParameterConfig;
 import org.tkit.quarkus.log.cdi.LogService;
 
 import gen.org.tkit.onecx.parameters.bff.rs.internal.ParametersApiService;
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
 import gen.org.tkit.onecx.parameters.clients.api.ParametersApi;
 import gen.org.tkit.onecx.parameters.clients.model.*;
-import gen.org.tkit.onecx.product.store.clients.api.ProductsApi;
-import gen.org.tkit.onecx.product.store.clients.model.ProductItemLoadSearchCriteriaPSV1;
-import gen.org.tkit.onecx.product.store.clients.model.ProductsLoadResultPSV1;
 
 @ApplicationScoped
 @Transactional(value = Transactional.TxType.NOT_SUPPORTED)
@@ -38,16 +33,6 @@ public class ParametersRestController implements ParametersApiService {
 
     @Inject
     ExceptionMapper exceptionMapper;
-
-    @Inject
-    @RestClient
-    ProductsApi productsApi;
-
-    @Inject
-    ProductsMapper productsMapper;
-
-    @Inject
-    ParameterConfig config;
 
     @Override
     public Response createParameter(ParameterCreateDTO applicationParameterCreateDTO) {
@@ -91,25 +76,6 @@ public class ParametersRestController implements ParametersApiService {
         try (Response response = client.getParameterById(id)) {
             return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(Parameter.class)))
                     .build();
-        }
-    }
-
-    @Override
-    public Response getProducts() {
-
-        try (Response response = client.getAllApplications()) {
-            var wrapper = mapper.createWrapper(response.readEntity(Product[].class));
-
-            var ps = config.restClients().productStore();
-            if (ps.enabled()) {
-                try (Response res = productsApi
-                        .loadProductsByCriteria(
-                                new ProductItemLoadSearchCriteriaPSV1().pageSize(ps.pageSize()).pageNumber(ps.pageNumber()))) {
-                    wrapper = mapper.maps(wrapper, res.readEntity(ProductsLoadResultPSV1.class));
-                }
-            }
-
-            return Response.status(response.getStatus()).entity(wrapper).build();
         }
     }
 

@@ -15,7 +15,6 @@ quarkus.http.auth.permission.default.policy=authenticated
 onecx.permissions.application-id=${quarkus.application.name}
 org.eclipse.microprofile.rest.client.propagateHeaders=apm-principal-token
 %prod.quarkus.rest-client.onecx_parameter_internal.url=http://onecx-parameter-svc:8080
-%prod.quarkus.rest-client.onecx_product_store_v1.url=http://onecx-product-store-svc:8080
 quarkus.openapi-generator.codegen.input-base-dir=target/tmp/openapi
 quarkus.openapi-generator.codegen.spec.onecx_parameter_svc_yaml.config-key=onecx_parameter_internal
 quarkus.openapi-generator.codegen.spec.onecx_parameter_svc_yaml.base-package=gen.org.tkit.onecx.parameters.clients
@@ -23,14 +22,52 @@ quarkus.openapi-generator.codegen.spec.onecx_parameter_svc_yaml.return-response=
 quarkus.openapi-generator.codegen.spec.onecx_parameter_svc_yaml.additional-api-type-annotations=@org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 quarkus.openapi-generator.codegen.spec.onecx_parameter_svc_yaml.additional-model-type-annotations=@io.quarkus.runtime.annotations.RegisterForReflection;
 quarkus.openapi-generator.codegen.spec.onecx_parameter_svc_yaml.enable-security-generation=false
-quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.config-key=onecx_product_store_v1
-quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.base-package=gen.org.tkit.onecx.product.store.clients
-quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.return-response=true
-quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.additional-api-type-annotations=@org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
-quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.additional-model-type-annotations=@io.quarkus.runtime.annotations.RegisterForReflection;
-quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.model-name-suffix=PSV1
-quarkus.openapi-generator.codegen.spec.onecx_product_store_svc_yaml.enable-security-generation=false
 %prod.quarkus.rest-client.onecx_parameter_internal.providers=io.quarkus.oidc.client.reactive.filter.OidcClientRequestReactiveFilter
+%prod.quarkus.oidc-client.client-id=${quarkus.application.name}
+----
+====
+
+=== Extensions
+
+include::onecx-parameter-bff-extensions.adoc[opts=optional]
+
+=== Container
+
+{docker-registry}[Docker registry]
+
+
+=== Helm
+
+{helm-registry}[Helm registry]
+
+Default values
+
+.{helm-file}
+[source,yaml]
+----
+app:
+  name: bff
+  image:
+    repository: "onecx/onecx-parameter-bff"
+  operator:
+    # Permission
+    permission:
+      enabled: true
+      spec:
+        permissions:
+          parameter:
+            read: permission on all GET requests and POST search
+            write: permission on PUT, POST, PATCH requests, where objects are saved or updated
+            delete: permission on all DELETE requests
+    keycloak:
+      client:
+        enabled: true
+        spec:
+          kcConfig:
+            defaultClientScopes: [ ocx-pa:all, ocx-pm:read ]
+----
+
+.client.reactive.filter.OidcClientRequestReactiveFilter
 %prod.quarkus.rest-client.onecx_product_store_v1.providers=io.quarkus.oidc.client.reactive.filter.OidcClientRequestReactiveFilter
 %prod.quarkus.oidc-client.client-id=${quarkus.application.name}
 ----
