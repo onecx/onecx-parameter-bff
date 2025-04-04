@@ -20,10 +20,6 @@ import org.tkit.onecx.parameters.bff.rs.controllers.ParametersRestController;
 
 import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
 import gen.org.tkit.onecx.parameters.clients.model.*;
-import gen.org.tkit.onecx.product.store.clients.model.MicroserviceAbstractPSV1;
-import gen.org.tkit.onecx.product.store.clients.model.ProductItemLoadSearchCriteriaPSV1;
-import gen.org.tkit.onecx.product.store.clients.model.ProductsAbstractPSV1;
-import gen.org.tkit.onecx.product.store.clients.model.ProductsLoadResultPSV1;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -334,75 +330,6 @@ class ParametersRestControllerTest extends AbstractTest {
                 .put(id)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
-    }
-
-    @Test
-    void getProductsTest() {
-
-        ProductItemLoadSearchCriteriaPSV1 svcCriteria = new ProductItemLoadSearchCriteriaPSV1().pageNumber(0).pageSize(1000);
-
-        ProductsLoadResultPSV1 svcResult = new ProductsLoadResultPSV1()
-                .number(0)
-                .totalElements(1L)
-                .totalPages(1L)
-                .addStreamItem(
-                        new ProductsAbstractPSV1()
-                                .basePath("test1")
-                                .name("test1")
-                                .displayName("test1")
-                                .addMicroservicesItem(new MicroserviceAbstractPSV1().appName("app1").appId("app1")))
-                .addStreamItem(
-                        new ProductsAbstractPSV1()
-                                .basePath("test2")
-                                .name("test2")
-                                .displayName("CustomDisplayName")
-                                .addMicroservicesItem(new MicroserviceAbstractPSV1().appName("app1").appId("app1")))
-                .addStreamItem(
-                        new ProductsAbstractPSV1()
-                                .basePath("test3")
-                                .name("test3")
-                                .displayName("test3")
-                                .addMicroservicesItem(new MicroserviceAbstractPSV1().appName("app1").appId("app1")));
-
-        // create mock rest endpoint
-        addExpectation(mockServerClient
-                .when(request().withPath("/v1/products/load")
-                        .withMethod(HttpMethod.POST)
-                        .withBody(JsonBody.json(svcCriteria)))
-                .withPriority(2000)
-                .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
-                        .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(svcResult))));
-
-        List<Product> data = new ArrayList<>();
-        Product product = new Product();
-        product.setProductName("test2");
-        product.setApplications(List.of("app1"));
-        data.add(product);
-
-        // create mock rest endpoint
-        addExpectation(mockServerClient.when(request().withPath("/parameters/applications").withMethod(HttpMethod.GET))
-                .withPriority(100)
-                .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
-                        .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(JsonBody.json(data))));
-
-        var wrapper = given()
-                .when()
-                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
-                .header(APM_HEADER_PARAM, ADMIN)
-                .contentType(APPLICATION_JSON)
-                .get("products")
-                .then()
-                .statusCode(Response.Status.OK.getStatusCode())
-                .extract().as(ProductWrapperDTO.class);
-
-        Assertions.assertNotNull(wrapper);
-        Assertions.assertNotNull(wrapper.getProducts());
-        Assertions.assertEquals(3, wrapper.getProducts().size());
-        Assertions.assertNotNull(wrapper.getUsedProducts());
-        Assertions.assertEquals(1, wrapper.getUsedProducts().size());
-        Assertions.assertEquals("CustomDisplayName", wrapper.getUsedProducts().get(0).getDisplayName());
     }
 
     @Test

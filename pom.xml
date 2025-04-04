@@ -182,19 +182,6 @@
                             <skipCache>true</skipCache>
                         </configuration>
                     </execution>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <id>product-store-v1</id>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>https://raw.githubusercontent.com/onecx/onecx-product-store-svc/main/src/main/openapi/onecx-product-store-v1.yaml</url>
-                            <outputDirectory>target/tmp/openapi</outputDirectory>
-                            <outputFileName>onecx-product-store-svc.yaml</outputFileName>
-                            <skipCache>true</skipCache>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
         </plugins>
