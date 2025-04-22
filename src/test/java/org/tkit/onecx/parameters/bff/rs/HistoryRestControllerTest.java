@@ -6,6 +6,7 @@ import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.ws.rs.HttpMethod;
@@ -22,6 +23,7 @@ import gen.org.tkit.onecx.parameters.bff.rs.internal.model.*;
 import gen.org.tkit.onecx.parameters.clients.model.History;
 import gen.org.tkit.onecx.parameters.clients.model.HistoryCount;
 import gen.org.tkit.onecx.parameters.clients.model.HistoryPageResult;
+import gen.org.tkit.onecx.parameters.clients.model.Product;
 import io.quarkiverse.mockserver.test.InjectMockServerClient;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -205,5 +207,37 @@ class HistoryRestControllerTest extends AbstractTest {
                 .get("/counts")
                 .then()
                 .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
+    void getAllApplicationsTest() {
+
+        List<Product> data = new ArrayList<>();
+        Product product = new Product();
+        product.setProductName("p1");
+        product.setApplications(List.of("app1", "app2", "app3"));
+        data.add(product);
+
+        // create mock rest endpoint
+        addExpectation(mockServerClient.when(request().withPath("/histories/products").withMethod(HttpMethod.GET))
+                .withPriority(100)
+                .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
+                        .withContentType(MediaType.APPLICATION_JSON)
+                        .withBody(JsonBody.json(data))));
+
+        var output = given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
+                .header(APM_HEADER_PARAM, ADMIN)
+                .contentType(APPLICATION_JSON)
+                .get("products")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .contentType(APPLICATION_JSON)
+                .extract().as(ProductDTO[].class);
+
+        Assertions.assertNotNull(output);
+        Assertions.assertEquals(data.size(), output.length);
+        Assertions.assertEquals(data.get(0).getApplications().size(), output[0].getApplications().size());
     }
 }

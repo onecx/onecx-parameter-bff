@@ -45,7 +45,7 @@ class ParametersRestControllerTest extends AbstractTest {
         data.add(product);
 
         // create mock rest endpoint
-        addExpectation(mockServerClient.when(request().withPath("/parameters/applications").withMethod(HttpMethod.GET))
+        addExpectation(mockServerClient.when(request().withPath("/parameters/products").withMethod(HttpMethod.GET))
                 .withPriority(100)
                 .respond(httpRequest -> response().withStatusCode(Response.Status.OK.getStatusCode())
                         .withContentType(MediaType.APPLICATION_JSON)
@@ -56,7 +56,7 @@ class ParametersRestControllerTest extends AbstractTest {
                 .auth().oauth2(keycloakClient.getAccessToken(ADMIN))
                 .header(APM_HEADER_PARAM, ADMIN)
                 .contentType(APPLICATION_JSON)
-                .get("applications")
+                .get("products")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .contentType(APPLICATION_JSON)

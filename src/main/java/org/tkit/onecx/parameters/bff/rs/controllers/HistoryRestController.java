@@ -19,6 +19,7 @@ import gen.org.tkit.onecx.parameters.clients.api.HistoriesApi;
 import gen.org.tkit.onecx.parameters.clients.model.History;
 import gen.org.tkit.onecx.parameters.clients.model.HistoryCount;
 import gen.org.tkit.onecx.parameters.clients.model.HistoryPageResult;
+import gen.org.tkit.onecx.parameters.clients.model.Product;
 
 @ApplicationScoped
 @Transactional(value = Transactional.TxType.NOT_SUPPORTED)
@@ -49,6 +50,14 @@ public class HistoryRestController implements HistoriesApiService {
         try (Response response = client.getAllParametersHistoryLatest(mapper.map(criteriaDTO))) {
             var result = mapper.map(response.readEntity(HistoryPageResult.class));
             return Response.status(response.getStatus()).entity(result).build();
+        }
+    }
+
+    @Override
+    public Response getAllHistoryProducts() {
+        try (Response response = client.getAllHistoryProducts()) {
+            return Response.status(response.getStatus()).entity(mapper.map(response.readEntity(Product[].class)))
+                    .build();
         }
     }
 
