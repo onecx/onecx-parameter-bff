@@ -422,4 +422,16 @@ class ParametersRestControllerTest extends AbstractTest {
         Assertions.assertEquals(output.getParameters().get("test1").toString(),
                 response.getParameters().get("test1").toString());
     }
+
+    @Test
+    void getAllApplicationsWrongPermissionTest() {
+        given()
+                .when()
+                .auth().oauth2(keycloakClient.getAccessToken(USER))
+                .header(APM_HEADER_PARAM, USER)
+                .contentType(APPLICATION_JSON)
+                .get("products")
+                .then()
+                .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+    }
 }

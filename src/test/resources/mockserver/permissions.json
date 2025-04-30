@@ -35,7 +35,7 @@
         "json": {
           "appId": "onecx-parameter-bff",
           "permissions": {
-            "parameter": ["read"],
+            "parameter": ["wrong"],
             "permission": ["admin-write","admin-read"]
           }
         },

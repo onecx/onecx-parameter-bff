@@ -23,6 +23,8 @@ public abstract class AbstractTest {
 
     private static final List<String> MOCK_IDS = new ArrayList<>();
 
+    protected static final String USER = "bob";
+
     protected static final String ADMIN = "alice";
 
     KeycloakTestClient keycloakClient = new KeycloakTestClient();
