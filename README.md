@@ -1,2 +1,2 @@
 # onecx-parameter-bff
-OneCx Parameter Management BFF
+OneCX Parameter Backend-For-Frontend
