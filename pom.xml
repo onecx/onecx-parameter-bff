@@ -7,12 +7,13 @@
     <parent>
         <groupId>org.tkit.onecx</groupId>
         <artifactId>onecx-quarkus3-parent</artifactId>
-        <version>2.5.0</version>
+        <version>3.1.0</version>
     </parent>
 
     <artifactId>onecx-parameter-bff</artifactId>
     <name>OneCX Parameter Backend For Frontend</name>
     <version>999-SNAPSHOT</version>
+    <packaging>quarkus</packaging>
 
     <dependencies>
         <dependency>
@@ -95,17 +96,6 @@
         <dependency>
             <groupId>io.quarkiverse.mockserver</groupId>
             <artifactId>quarkus-mockserver-test</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.swagger.parser.v3</groupId>
-                    <artifactId>swagger-parser</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger.parser.v3</groupId>
-            <artifactId>swagger-parser</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -115,7 +105,7 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5-mockito</artifactId>
+            <artifactId>quarkus-junit-mockito</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
